@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView marks=(TextView)findViewById(R.id.marksView);
-        connectWithEres();
+        //connectWithEres();
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
