@@ -1,0 +1,43 @@
+<resources>
+    <!-- Title for the application. -->
+    <string name="app_name">eresViewer</string>
+
+    <!-- MainActivity label. -->
+    <string name="mainAct_label">Co chcesz zrobić?</string>
+
+    <!-- Category name for marks -->
+    <string name="category_marks">Oceny</string>
+
+    <!-- Category name for settings -->
+    <string name="category_settings">Ustawienia</string>
+
+    <!-- Category name for school plan -->
+    <string name="category_plan">Plan zajęć</string>
+
+    <!-- name label for topBar in activity_subject -->
+    <string name="topbar_name">Nazwa</string>
+
+    <!-- My mark label for topBar in activity_subject -->
+    <string name="topbar_myMark">Moja ocena</string>
+
+    <!-- lower mark label for topBar in activity_subject -->
+    <string name="topbar_lower">Min.</string>
+
+    <!-- average mark label for topBar in activity_subject -->
+    <string name="topbar_average">średnia</string>
+
+    <!-- higher mark label for topBar in activity_subject -->
+    <string name="topbar_higher">Max.</string>
+
+    <!-- amount of marks label for topBar in activity_subject -->
+    <string name="topbar_amount">L.ocen</string>
+
+
+
+
+    <!-- Font for MainActivity -->
+    <string name="MainActivityFont">sans-serif-light</string>
+
+
+
+</resources>
