@@ -6,21 +6,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
-
+    ArrayList<SubjectActivity> subjectsList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         TextView marks=(TextView)findViewById(R.id.marksView);
-        //connectWithEres();
+
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -28,27 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
                 startActivity(marksIntent);
 
+
             }
         });
-
+       /* connectWithEres(); */
+        URL url=new URL("https://studia.elka.pw.edu.pl/");
+        new SynchronizeWithEresTask().execute("https://studia.elka.pw.edu.pl/",1, subjectsList);
     }
 
-    public void connectWithEres(){
-        try {
-            URL url = new URL("https://studia.elka.pw.edu.pl/");
 
-            HttpsURLConnection connection=(HttpsURLConnection)url.openConnection();
-
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
-            int responseCode=connection.getResponseCode();
-          } catch (MalformedURLException e) {
-        e.printStackTrace();
-         }
-        catch (java.io.IOException e) {
-         e.printStackTrace();
-        }
-
-    }
 }
