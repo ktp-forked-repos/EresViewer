@@ -28,17 +28,23 @@ public class MarkAdapter extends ArrayAdapter<Mark> {
         View listItemView = convertView;
         if (listItemView == null)
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
-        TextView TitleTextView=(TextView)listItemView.findViewById(R.id.markName);
+
+        TextView TitleTextView = (TextView) listItemView.findViewById(R.id.markName);
         TitleTextView.setText(currentMark.getMarkTitle());
-        TextView myMarkTextView=(TextView)listItemView.findViewById(R.id.myMark);
+
+        TextView myMarkTextView = (TextView) listItemView.findViewById(R.id.myMark);
         myMarkTextView.setText(Float.toString(currentMark.getMyMark()));
-        TextView lowerMarkTextView=(TextView)listItemView.findViewById(R.id.lowerMark);
+
+        TextView lowerMarkTextView = (TextView) listItemView.findViewById(R.id.lowerMark);
         lowerMarkTextView.setText(Float.toString(currentMark.getLowerMark()));
-        TextView averageMarkTextView=(TextView)listItemView.findViewById(R.id.averageMark);
+
+        TextView averageMarkTextView = (TextView) listItemView.findViewById(R.id.averageMark);
         averageMarkTextView.setText(Float.toString(currentMark.getAverageMark()));
-        TextView higherMarkTextView=(TextView)listItemView.findViewById(R.id.higherMark);
+
+        TextView higherMarkTextView = (TextView) listItemView.findViewById(R.id.higherMark);
         higherMarkTextView.setText((Float.toString(currentMark.getHigherMark())));
-        TextView amountOfMarksTextView=(TextView)listItemView.findViewById(R.id.amountOfMarks);
+
+        TextView amountOfMarksTextView = (TextView) listItemView.findViewById(R.id.amountOfMarks);
         amountOfMarksTextView.setText(Float.toString(currentMark.getAmountOfMarks()));
 
         return listItemView;

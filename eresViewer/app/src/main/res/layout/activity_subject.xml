@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/separatorColor"
     android:orientation="vertical">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    style="@style/defaultContentStyle">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        style="@style/defaultContentStyle"
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp">
 
-        <TextView
-            android:id="@+id/myMarkLdabel"
-            android:text="@string/topbar_myMark"
-            style="@style/regularSpreadItemsInRow" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/minLdabel"
-            android:text="@string/topbar_lower"
-            style="@style/regularSpreadItemsInRow"
-         />
+            <TextView
+                android:id="@+id/myMarkLdabel"
+                style="@style/regularSpreadItemsInRow"
+                android:text="@string/topbar_myMark" />
 
-        <TextView
-            android:id="@+id/averageLdabel"
-            android:text="@string/topbar_average"
-            style="@style/regularSpreadItemsInRow" />
+            <TextView
+                android:id="@+id/minLdabel"
+                style="@style/regularSpreadItemsInRow"
+                android:text="@string/topbar_lower" />
 
-        <TextView
-            android:id="@+id/higherLdabel"
-            android:text="@string/topbar_higher"
-            style="@style/regularSpreadItemsInRow" />
+            <TextView
+                android:id="@+id/averageLdabel"
+                style="@style/regularSpreadItemsInRow"
+                android:text="@string/topbar_average" />
 
-        <TextView
-            android:id="@+id/amountLdabel"
-            android:text="@string/topbar_amount"
-            style="@style/regularSpreadItemsInRow" />
+            <TextView
+                android:id="@+id/higherLdabel"
+                style="@style/regularSpreadItemsInRow"
+                android:text="@string/topbar_higher" />
+
+            <TextView
+                android:id="@+id/amountLdabel"
+                style="@style/regularSpreadItemsInRow"
+                android:text="@string/topbar_amount" />
+        </LinearLayout>
+
+
+        <ExpandableListView
+            android:id="@+id/listview_mark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
     </LinearLayout>
-
-
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/listview_mark"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
-
-</LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
