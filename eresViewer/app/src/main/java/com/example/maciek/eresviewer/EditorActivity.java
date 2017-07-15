@@ -45,12 +45,12 @@ public class EditorActivity extends AppCompatActivity {
         int amountOfMarks = Integer.parseInt(mAmountOfMarksEditText.getText().toString().trim());
 
         ContentValues values = new ContentValues();
-        values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE,myMark);
-        values.put(MarksContract.MarksEntry.COLUMN_MY_MARK,(int)(myMark*10));
-        values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK,(int)(markMin*10));
-        values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK,(int)(markAvg*10));
-        values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK,(int)(markMax*10));
-        values.put(MarksContract.MarksEntry.COLUMN_MY_MARK,amountOfMarks);
+        values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE,markTitle);
+        values.put(MarksContract.MarksEntry.COLUMN_MY_MARK,(int)(myMark*100));
+        values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK,(int)(markMin*100));
+        values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK,(int)(markAvg*100));
+        values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK,(int)(markMax*100));
+        values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS,amountOfMarks);
 
         MarksDbHelper mDbHelper = new MarksDbHelper(this);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
