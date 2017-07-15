@@ -24,7 +24,6 @@ public class SubjectActivity extends AppCompatActivity {
         markAdapter = new ExpandableListAdapter(this, marks);
         listView = (ExpandableListView) findViewById(R.id.listview_mark);
         listView.setAdapter(markAdapter);
-
     }
 
     private void initData() {

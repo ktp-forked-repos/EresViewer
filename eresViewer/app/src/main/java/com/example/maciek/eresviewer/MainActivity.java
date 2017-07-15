@@ -25,9 +25,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent marksIntent = new Intent(MainActivity.this, SubjectActivity.class);
-
                 startActivity(marksIntent);
+            }
+        });
 
+        TextView add=(TextView)findViewById(R.id.addView);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editorIntent = new Intent(MainActivity.this, EditorActivity.class);
+                startActivity(editorIntent);
             }
         });
 
