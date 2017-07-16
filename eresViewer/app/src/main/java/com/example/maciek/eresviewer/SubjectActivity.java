@@ -44,8 +44,7 @@ public class SubjectActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        /*Create and open a database to read from it */
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
         /*Creating ArrayList for marks loaded from database*/
         marks = new ArrayList<>();
 
@@ -60,7 +59,7 @@ public class SubjectActivity extends AppCompatActivity {
                 MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS};
 
         /*Make a query on the marks table*/
-        Cursor cursor = db.query(
+        /**Cursor cursor = db.query(
                 MarksContract.MarksEntry.TABLE_NAME, // The table to query
                 projection,                          // Columns to return
                 null,                                // Columns for the WHERE clause
@@ -68,6 +67,9 @@ public class SubjectActivity extends AppCompatActivity {
                 null,                                // Don't group the rows
                 null,                                // Don't filter by row groups
                 null);                              // The sort order
+        */
+
+        Cursor cursor = getContentResolver().query(MarksContract.MarksEntry.CONTENT_URI, projection, null, null, null);
 
         try {
             // Figure out the index of each column

@@ -43,5 +43,8 @@
     <string name="usu">Usuń</string>
     <string name="zapisz">Zapisz</string>
 
+    <string name="editor_insert_pet_failed">"Insert failed!"</string>
+    <string name="editor_insert_pet_successful">"Insert successful!"</string>>
+
 
 </resources>

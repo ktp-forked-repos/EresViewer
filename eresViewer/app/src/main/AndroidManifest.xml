@@ -25,7 +25,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".EditorActivity"
+        <activity
+            android:name=".EditorActivity"
             android:parentActivityName=".MainActivity">
 
 
@@ -34,6 +35,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+        <provider
+            android:name=".data.MarksProvider"
+            android:authorities="com.example.maciek.eresviewer"
+            android:exported="false" />
     </application>
 
 </manifest>
