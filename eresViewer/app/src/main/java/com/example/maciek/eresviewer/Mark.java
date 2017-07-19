@@ -28,7 +28,7 @@ public class Mark {
     /**
      * Liczba ocen
      */
-    private float amountOfMarks;
+    private int amountOfMarks;
 
    //gettery
 
@@ -36,10 +36,10 @@ public class Mark {
     public float getMyMark() { return myMark; }
     public float getAverageMark() {return averageMark; }
     public float getHigherMark() { return higherMark; }
-    public float getAmountOfMarks() { return amountOfMarks; }
+    public int getAmountOfMarks() { return amountOfMarks; }
     public float getLowerMark() { return lowerMark; }
 
-    Mark(String markTitle, float myMark, float lowerMark,float averageMark,float higherMark, float amountOfMarks){
+    Mark(String markTitle, float myMark, float lowerMark,float averageMark,float higherMark, int amountOfMarks){
         this.markTitle=markTitle;
         this.myMark=myMark;
         this.lowerMark=lowerMark;

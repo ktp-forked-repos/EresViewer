@@ -11,8 +11,8 @@
     <!-- Category name for settings -->
     <string name="category_settings">Ustawienia</string>
 
-    <!-- Category name for school plan -->
-    <string name="category_plan">Plan zajęć</string>
+    <!-- Category name for adding new mark -->
+    <string name="category_add">Dodaj ocenę</string>
 
     <!-- name label for topBar in activity_subject -->
     <string name="topbar_name">Nazwa</string>
@@ -33,11 +33,15 @@
     <string name="topbar_amount">L.ocen</string>
 
 
-
-
-    <!-- Font for MainActivity -->
-    <string name="MainActivityFont">sans-serif-light</string>
-
+    <string name="moja_ocena">moja ocena</string>
+    <string name="nazwa_oceny">nazwa oceny</string>
+    <string name="dane_oceny">dane oceny</string>
+    <string name="ocena_min">ocena min.</string>
+    <string name="rednia_ocena">średnia ocena</string>
+    <string name="ocena_max">ocena max.</string>
+    <string name="liczba_ocen">liczba ocen</string>
+    <string name="usu">Usuń</string>
+    <string name="zapisz">Zapisz</string>
 
 
 </resources>

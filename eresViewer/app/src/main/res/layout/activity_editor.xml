@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".EditorActivity">
+
+    <!-- Moja ocena -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/moja_ocena" />
+
+        <!-- Input fields -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
+
+            <!-- Nazwa oceny-->
+            <EditText
+                android:id="@+id/edit_mark_title"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/nazwa_oceny"
+                android:inputType="textCapWords" />
+
+            <!-- Moja ocena -->
+            <EditText
+                android:id="@+id/edit_my_mark"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/moja_ocena"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Dane oceny -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/dane_oceny" />
+
+        <!-- Input fields -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
+
+            <!-- Ocena min. -->
+            <EditText
+                android:id="@+id/edit_mark_min"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/ocena_min"
+                android:inputType="numberDecimal" />
+
+            <!-- Ocena srednia-->
+            <EditText
+                android:id="@+id/edit_mark_averenge"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/rednia_ocena"
+                android:inputType="numberDecimal" />
+
+            <!-- Ocena max -->
+            <EditText
+                android:id="@+id/edit_mark_max"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/ocena_max"
+                android:inputType="numberDecimal" />
+
+            <!-- Moja ocena -->
+            <EditText
+                android:id="@+id/edit_amount_of_marks"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/liczba_ocen"
+                android:inputType="number" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

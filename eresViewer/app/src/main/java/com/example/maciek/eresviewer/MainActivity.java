@@ -25,15 +25,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView marks=(TextView)findViewById(R.id.marksView);
+<<<<<<< HEAD
 
+=======
+        //connectWithEres();
+>>>>>>> refs/remotes/origin/baza-danych
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent marksIntent = new Intent(MainActivity.this, SubjectActivity.class);
-
                 startActivity(marksIntent);
+            }
+        });
 
+<<<<<<< HEAD
 
+=======
+        TextView add=(TextView)findViewById(R.id.addView);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editorIntent = new Intent(MainActivity.this, EditorActivity.class);
+                startActivity(editorIntent);
+>>>>>>> refs/remotes/origin/baza-danych
             }
         });
         try {
