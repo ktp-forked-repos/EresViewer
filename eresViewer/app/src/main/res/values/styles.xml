@@ -26,4 +26,6 @@
         <item name="android:textSize">15sp</item>
         <item name="android:fontFamily">@string/MainActivityFont</item>
     </style>
+
+
 </resources>

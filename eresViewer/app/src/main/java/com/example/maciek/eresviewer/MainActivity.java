@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<SubjectActivity> subjectsList;
+    private ArrayList<SubjectActivity> subjectsList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-       /* connectWithEres(); */
-        URL url=new URL("https://studia.elka.pw.edu.pl/");
-        new SynchronizeWithEresTask().execute("https://studia.elka.pw.edu.pl/",1, subjectsList);
+        try {
+
+            URL url1 = new URL("https://studia.elka.pw.edu.pl/pl/");
+            new SynchronizeWithEresTask().execute(url1);
+        }
+        catch(java.net.MalformedURLException e){
+
+        }
+
     }
 
 

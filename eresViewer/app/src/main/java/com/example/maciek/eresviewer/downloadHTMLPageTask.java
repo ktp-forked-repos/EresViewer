@@ -1,7 +1,10 @@
 package com.example.maciek.eresviewer;
 
 import android.os.AsyncTask;
-import android.widget.TextView;
+import android.util.Base64;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -9,32 +12,32 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.security.auth.Subject;
 
 /**
- * Created by Maciek on 12.07.2017.
+ * Created by Maciek on 17.07.2017.
  */
 
-public class SynchronizeWithEresTask extends AsyncTask<URL,Integer, ArrayList<SubjectActivity> > {
-@Override
-    protected ArrayList<SubjectActivity> doInBackground(URL... url){
-        connectWithEres();
-        return null;
-    }
-
-    protected void onPostExecute(ArrayList<SubjectActivity> subjectsArray){
-
-    }
-
-    public void connectWithEres(URL url){
+public abstract class downloadHTMLPageTask<Params, Progress, Result> extends
+        AsyncTask<Params, Progress, Result>  {
+    /**
+     * metoda zwracająca obiekt typu Dokument potrzebny do łatwego parsowania plików
+     * HTML za pomocą biblioteki Jsoup
+     */
+    public Document downloadHTMLPage(String pageAsString) {
+        Document doc=new Document("");
         try {
-
-            HttpsURLConnection connection=(HttpsURLConnection)url.openConnection();
-
+            URL url1 = new URL(pageAsString);
+            HttpsURLConnection connection=(HttpsURLConnection)url1.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
+            String username="mkobiere";
+            String password="PLNYselena1";
+            byte[] message = (username+":"+password).getBytes("UTF-8");
+            String encoded = Base64.encodeToString(message, Base64.DEFAULT);
+            connection.setRequestProperty("Authorization", "Basic "+encoded);
             DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
             int responseCode=connection.getResponseCode();
 
@@ -46,6 +49,8 @@ public class SynchronizeWithEresTask extends AsyncTask<URL,Integer, ArrayList<Su
                 responseOutput.append(line);
 
             String response=responseOutput.toString();
+            doc= Jsoup.parse(response);
+
 
 
 
@@ -55,6 +60,6 @@ public class SynchronizeWithEresTask extends AsyncTask<URL,Integer, ArrayList<Su
         catch (java.io.IOException e) {
             e.printStackTrace();
         }
-
+        return doc;
     }
 }
