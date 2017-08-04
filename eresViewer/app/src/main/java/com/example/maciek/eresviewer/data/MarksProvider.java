@@ -13,19 +13,22 @@ import android.util.Log;
  * Created by Adrian on 2017-07-15.
  */
 
-public class MarksProvider extends ContentProvider{
+public class MarksProvider extends ContentProvider {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = MarksProvider.class.getSimpleName();
-    private MarksDbHelper mDbHelper;
-
-    /** URI matcher code for the content URI for the pets table */
+    /**
+     * URI matcher code for the content URI for the pets table
+     */
     public static final int PETS = 100;
-
-    /** URI matcher code for the content URI for a single pet in the pets table */
+    /**
+     * URI matcher code for the content URI for a single pet in the pets table
+     */
     public static final int PET_ID = 101;
-
-    /** URI matcher object to match a context URI to a corresponding code.
+    /**
+     * URI matcher object to match a context URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
      * It's common to use NO_MATCH as the input for this case.
      */
@@ -51,6 +54,8 @@ public class MarksProvider extends ContentProvider{
         // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
         sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_MARKS + "/#", PET_ID);
     }
+
+    private MarksDbHelper mDbHelper;
 
     @Override
     public boolean onCreate() {
@@ -80,7 +85,7 @@ public class MarksProvider extends ContentProvider{
                 // For the PETS code, query the pets table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the pets table.
-                cursor = database.query(MarksContract.MarksEntry.TABLE_NAME,projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = database.query(MarksContract.MarksEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case PET_ID:
                 // For the PET_ID code, extract out the ID from the URI.
@@ -92,7 +97,7 @@ public class MarksProvider extends ContentProvider{
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
                 selection = MarksContract.MarksEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
@@ -102,6 +107,10 @@ public class MarksProvider extends ContentProvider{
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+
+
+        //Set notification URI on the Cursor
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -129,6 +138,11 @@ public class MarksProvider extends ContentProvider{
                     Log.e(LOG_TAG, "Failed to insert row for " + uri);
                     return null;
                 }
+                //Notify all listeners that the data has changed for the mark content URI
+                // uri: content://com.example.maciek.eresviewer/marks
+                getContext().getContentResolver().notifyChange(uri, null);
+
+
                 // Return the new URI with the ID (of the newly inserted row) appended at the end
                 return ContentUris.withAppendedId(uri, id);
 
@@ -152,7 +166,7 @@ public class MarksProvider extends ContentProvider{
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = MarksContract.MarksEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return updatePet(uri, contentValues, selection, selectionArgs);
 
@@ -176,7 +190,10 @@ public class MarksProvider extends ContentProvider{
 
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        return database.update(MarksContract.MarksEntry.TABLE_NAME,values,selection,selectionArgs);
+
+        int rowsUpdated = database.update(MarksContract.MarksEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (rowsUpdated != 0) getContext().getContentResolver().notifyChange(uri, null);
+        return rowsUpdated;
     }
 
     /**
@@ -188,32 +205,46 @@ public class MarksProvider extends ContentProvider{
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
         switch (match) {
             case PETS:
+                rowsDeleted = database.delete(MarksContract.MarksEntry.TABLE_NAME, selection, selectionArgs);
+                if (rowsDeleted != 0) {
+                    //Notify all listeners that the data has changed for the mark content URI
+                    // uri: content://com.example.maciek.eresviewer/marks
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
                 // Delete all rows that match the selection and selection args
-                return database.delete(MarksContract.MarksEntry.TABLE_NAME, selection, selectionArgs);
+                return rowsDeleted;
             case PET_ID:
                 // Delete a single row given by the ID in the URI
                 selection = MarksContract.MarksEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(MarksContract.MarksEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(MarksContract.MarksEntry.TABLE_NAME, selection, selectionArgs);
+                if (rowsDeleted != 0) {
+                    //Notify all listeners that the data has changed for the mark content URI
+                    // uri: content://com.example.maciek.eresviewer/marks
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rowsDeleted;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
     }
+
     /**
      * Returns the MIME type of data for the content URI.
      */
-        @Override
-        public String getType(Uri uri) {
-            final int match = sUriMatcher.match(uri);
-            switch (match) {
-                case PETS:
-                    return MarksContract.MarksEntry.CONTENT_LIST_TYPE;
-                case PET_ID:
-                    return MarksContract.MarksEntry.CONTENT_ITEM_TYPE;
-                default:
-                    throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
-            }
+    @Override
+    public String getType(Uri uri) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case PETS:
+                return MarksContract.MarksEntry.CONTENT_LIST_TYPE;
+            case PET_ID:
+                return MarksContract.MarksEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
+    }
 }
