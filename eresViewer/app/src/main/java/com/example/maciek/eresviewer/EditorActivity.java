@@ -20,22 +20,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.maciek.eresviewer.data.MarksContract;
 import com.example.maciek.eresviewer.data.MarksContract.MarksEntry;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    //Identifies loader being used in this component
     private static final int MARK_LOADER = 0;
-    private EditText mMarkTitleEditText;
-    private EditText mMyMarkEditText;
-    private EditText mMarkMinEditText;
-    private EditText mMarkAvgEditText;
-    private EditText mMarkMaxEditText;
-    private EditText mAmountOfMarksEditText;
-    private Uri mCurrentMarkUri;
 
+    private EditText mMarkTitleEditText, mMyMarkEditText, mMarkMinEditText, mMarkAvgEditText, mMarkMaxEditText, mAmountOfMarksEditText;
+    private Uri currentMarkUri;
+
+    //Flag saying if any of EditText fields has been touched by user
     private boolean changed = false;
-
+    //Listener changing @changed flag
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -48,20 +45,21 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-
+        /*Getting intent sent to EditorActivity*/
         Intent intent = getIntent();
-        Uri currentMarkUri = intent.getData();
-        mCurrentMarkUri = currentMarkUri;
+        /*Geting id data sent in intent*/
+        currentMarkUri = intent.getData();
+        /*EditorActivity has two modes, launched depending on whether any data got extracted from an intent.
+        * If currnetMarkUri is null, it means intent has been sent without addidtional id info.*/
         if (currentMarkUri == null) {
             setTitle("Dodaj ocenę");
             invalidateOptionsMenu();
         } else {
             setTitle("Edycja oceny");
-            //Start the loader
             getLoaderManager().initLoader(MARK_LOADER, null, this);
         }
 
-        // Find all relevant views that we will need to read user input from
+        /*Find all relevant views that we will need to read user input from*/
         mMarkTitleEditText = (EditText) findViewById(R.id.edit_mark_title);
         mMyMarkEditText = (EditText) findViewById(R.id.edit_my_mark);
         mMarkMinEditText = (EditText) findViewById(R.id.edit_mark_min);
@@ -69,6 +67,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mMarkMaxEditText = (EditText) findViewById(R.id.edit_mark_max);
         mAmountOfMarksEditText = (EditText) findViewById(R.id.edit_amount_of_marks);
 
+        /*Every EditText field gets a TouchListener to change flag status when user touched any text field*/
         mMarkTitleEditText.setOnTouchListener(mTouchListener);
         mMyMarkEditText.setOnTouchListener(mTouchListener);
         mMarkMinEditText.setOnTouchListener(mTouchListener);
@@ -77,6 +76,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mAmountOfMarksEditText.setOnTouchListener(mTouchListener);
     }
 
+    /**
+     * Mark is added or edited
+     */
     private void saveMark() {
         String markTitle = mMarkTitleEditText.getText().toString().trim();
         String myMark = mMyMarkEditText.getText().toString().trim();
@@ -85,6 +87,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String markMax = mMarkMaxEditText.getText().toString().trim();
         String amountOfMarks = mAmountOfMarksEditText.getText().toString().trim();
 
+        /*If all text fields remain empty, no action is taken*/
         if (TextUtils.isEmpty(markTitle) &&
                 TextUtils.isEmpty(myMark) &&
                 TextUtils.isEmpty(markMin) &&
@@ -92,36 +95,32 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 TextUtils.isEmpty(markMax) &&
                 TextUtils.isEmpty(amountOfMarks))
             return;
-
-
+        /*Creating new ContentValues object, which will be used as parameter of ContentResolver's insert method*/
         ContentValues values = new ContentValues();
 
+        /*If text field is empty, default value is put into ContentValues object*/
         if (!TextUtils.isEmpty(markTitle))
-            values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, markTitle);
-        else values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, "");
-
+            values.put(MarksEntry.COLUMN_MARK_TITLE, markTitle);
+        else values.put(MarksEntry.COLUMN_MARK_TITLE, "");
         if (!TextUtils.isEmpty(myMark))
-            values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, (int) (Float.parseFloat(myMark) * 100));
-        else values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 0);
-
+            values.put(MarksEntry.COLUMN_MY_MARK, (int) (Float.parseFloat(myMark) * 100));
+        else values.put(MarksEntry.COLUMN_MY_MARK, 0);
         if (!TextUtils.isEmpty(markMin))
-            values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, (int) (Float.parseFloat(markMin) * 100));
-        else values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, 0);
-
+            values.put(MarksEntry.COLUMN_LOWER_MARK, (int) (Float.parseFloat(markMin) * 100));
+        else values.put(MarksEntry.COLUMN_LOWER_MARK, 0);
         if (!TextUtils.isEmpty(markAvg))
-            values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, (int) (Float.parseFloat(markAvg) * 100));
-        else values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, 0);
-
+            values.put(MarksEntry.COLUMN_AVEREGE_MARK, (int) (Float.parseFloat(markAvg) * 100));
+        else values.put(MarksEntry.COLUMN_AVEREGE_MARK, 0);
         if (!TextUtils.isEmpty(markMax))
-            values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, (int) (Float.parseFloat(markMax) * 100));
-        else values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 0);
-
+            values.put(MarksEntry.COLUMN_HIGHER_MARK, (int) (Float.parseFloat(markMax) * 100));
+        else values.put(MarksEntry.COLUMN_HIGHER_MARK, 0);
         if (!TextUtils.isEmpty(amountOfMarks))
-            values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, amountOfMarks);
-        else values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
+            values.put(MarksEntry.COLUMN_AMOUNT_OF_MARKS, amountOfMarks);
+        else values.put(MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
 
-        if (mCurrentMarkUri == null) {
-            Uri newUri = getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);
+        // Adding new mark
+        if (currentMarkUri == null) {
+            Uri newUri = getContentResolver().insert(MarksEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful
             if (newUri == null) {
@@ -133,16 +132,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, getString(R.string.editor_insert_pet_successful),
                         Toast.LENGTH_SHORT).show();
             }
+            // Editing mark
         } else {
-            int updatedIndex = getContentResolver().update(mCurrentMarkUri, values, null, null);
+            int updatedIndex = getContentResolver().update(currentMarkUri, values, null, null);
             // Show a toast message depending on whether or not the insertion was successful
             if (updatedIndex == 0) {
                 // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, "Edycja nie powiodła się",
+                Toast.makeText(this, "Edycja nie powiodła się", //TODO: don't hardcode strings
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, "Zedytowałeś jak król",
+                Toast.makeText(this, "Zedytowałeś jak król", //TODO: don't hardcode strings
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -151,7 +151,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/menu_editor.xml file.
         // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         return true;
@@ -172,17 +171,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
                 return true;
-
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
                 if (!changed) {
+                    /*If no changes took place home button navgates up*/
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     return true;
                 }
-
-                // Otherwise if there are unsaved changes, setup a dialog to warn the user.
-                // Create a click listener to handle the user confirming that
-                // changes should be discarded.
+                 /*Otherwise if there are unsaved changes, setup a dialog to warn the user.
+                 Create a click listener to handle the user confirming that
+                 changes should be discarded.*/
                 DialogInterface.OnClickListener discardButtonClickListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -211,10 +209,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 MarksEntry.COLUMN_HIGHER_MARK,
                 MarksEntry.COLUMN_AMOUNT_OF_MARKS};
 
-
         //This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,
-                mCurrentMarkUri,
+                currentMarkUri,
                 projection,
                 null,
                 null,
@@ -267,7 +264,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 }
             }
         });
-
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -295,15 +291,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private void deleteMark() {
-        int rowsDeleted = getContentResolver().delete(mCurrentMarkUri, null, null);
+        int rowsDeleted = getContentResolver().delete(currentMarkUri, null, null);
 
-        // Show a toast message depending on whether or not the insertion was successful
+        // Show a toast message depending on whether or not the deletion was successful
         if (rowsDeleted == 0) {
-            // If the new content URI is null, then there was an error with insertion.
+            // If the new content URI is null, then there was an error with deletion.
             Toast.makeText(this, "Coś się nie usunęło",
                     Toast.LENGTH_SHORT).show();
         } else {
-            // Otherwise, the insertion was successful and we can display a toast.
+            // Otherwise, the deletion was successful and we can display a toast.
             Toast.makeText(this, "łokieć, pięta, nie ma klienta",
                     Toast.LENGTH_SHORT).show();
             finish();
@@ -330,7 +326,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         // If this is a new pet, hide the "Delete" menu item.
-        if (mCurrentMarkUri == null) {
+        if (currentMarkUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
         }

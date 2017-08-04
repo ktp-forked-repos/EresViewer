@@ -31,18 +31,27 @@ public class MarkCursorAdapter extends CursorAdapter {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.markName);
         TextView myMarkTextView = (TextView) view.findViewById(R.id.myMark);
+        TextView minMarkTextView = (TextView) view.findViewById(R.id.lowerMark);
+        TextView avgMarkTextView = (TextView) view.findViewById(R.id.averageMark);
+        TextView maxMarkTextView = (TextView) view.findViewById(R.id.higherMark);
+        TextView amountOfMarksTextView = (TextView) view.findViewById(R.id.amountOfMarks);
 
-        // Find the columns of pet attributes that we're interested in
+        // Find the marks columns that we're interested in
         int markTitleColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MARK_TITLE);
         int myMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MY_MARK);
-
-        // Read the mark attributes from the Cursor for the current mark
-        String markTitle = cursor.getString(markTitleColumnIndex);
-        float myMark = cursor.getFloat(myMarkColumnIndex)/100;
+        int minMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_LOWER_MARK);
+        int avgMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK);
+        int maxMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_HIGHER_MARK);
+        int amountOfMarksColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS);
 
         // Update the TextViews with the attributes for the current mark
-        nameTextView.setText(markTitle);
-        myMarkTextView.setText(Float.toString(myMark));
+        nameTextView.setText(cursor.getString(markTitleColumnIndex));
+        myMarkTextView.setText(String.valueOf(cursor.getFloat(myMarkColumnIndex) / 100));
+        minMarkTextView.setText(String.valueOf(cursor.getFloat(minMarkColumnIndex) / 100));
+        avgMarkTextView.setText(String.valueOf(cursor.getFloat(avgMarkColumnIndex) / 100));
+        maxMarkTextView.setText(String.valueOf(cursor.getFloat(maxMarkColumnIndex) / 100));
+        amountOfMarksTextView.setText(String.valueOf(cursor.getInt(amountOfMarksColumnIndex)));
+
     }
 
 }

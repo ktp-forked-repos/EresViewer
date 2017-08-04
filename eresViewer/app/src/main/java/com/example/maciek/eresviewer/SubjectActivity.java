@@ -9,11 +9,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.maciek.eresviewer.data.MarksContract.MarksEntry;
 
@@ -24,16 +22,9 @@ import com.example.maciek.eresviewer.data.MarksContract.MarksEntry;
 
 public class SubjectActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    //private ExpandableListAdapter markAdapter;
-    //private List<Mark> marks;
-    /**
-     * Database helper that will provide acces to the database
-     */
-    //private MarksDbHelper mDbHelper;
-
-    //Identifies a paricular loader beint used in this component
+    //Identifies loader being used in this component
     private static final int MARK_LOADER = 0;
-
+    //Cursor adapter object creating list of marks from database cursors
     MarkCursorAdapter mCursorAdapter;
 
     @Override
@@ -41,31 +32,34 @@ public class SubjectActivity extends AppCompatActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
 
-        //Find the ListView which will be populated with the pet data
+        //Find the ListView which will be populated with the data
         ListView listView = (ListView) findViewById(R.id.listview_mark);
-
-        //listView.setAdapter(markAdapter);
-
+        // Creating cursor adapter taking this activity as context and a null cursor
         mCursorAdapter = new MarkCursorAdapter(this, null);
+        //Attaching adapter to the listView
         listView.setAdapter(mCursorAdapter);
-
+        //Adding onItemClickListener so items of the list will expand when clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView rozwijane = (TextView) view.findViewById(R.id.myMark);
+                View rozwijane = view.findViewById(R.id.details);
+                //Expanding list elements by hiding part of it
                 if (rozwijane.getVisibility() == View.GONE) {
-                    rozwijane.setVisibility(view.VISIBLE);
-                } else {
+                    rozwijane.setVisibility(View.VISIBLE);
+                }
+                else {
                     //expandedChildList.set(arg2, false);
                     rozwijane.setVisibility(View.GONE);
                 }
             }
         });
-
+        //Adding onItemLongClickLisener so long pressing list item sends intent to editor activity
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent editorIntent = new Intent(SubjectActivity.this, EditorActivity.class);
+                //Appending id of long-pressed item to database URI
                 Uri currentMarkUri = ContentUris.withAppendedId(MarksEntry.CONTENT_URI, id);
                 editorIntent.setData(currentMarkUri);
                 startActivity(editorIntent);
@@ -77,10 +71,10 @@ public class SubjectActivity extends AppCompatActivity implements LoaderManager.
         getLoaderManager().initLoader(MARK_LOADER, null, this);
 
     }
-
+    /*Using a loader*/
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-         /*Define a projection that specifies which columnts from database we will use*/
+         /*Define a projection that specifies which columns from database we will use*/
         String[] projection = {
                 MarksEntry._ID,
                 MarksEntry.COLUMN_MARK_TITLE,

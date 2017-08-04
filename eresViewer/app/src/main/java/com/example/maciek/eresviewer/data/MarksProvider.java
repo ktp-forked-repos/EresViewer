@@ -7,7 +7,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.util.Log;
 
 /**
  * Created by Adrian on 2017-07-15.
@@ -16,17 +15,13 @@ import android.util.Log;
 public class MarksProvider extends ContentProvider {
 
     /**
-     * Tag for the log messages
+     * URI matcher code for the content URI for a marks table
      */
-    public static final String LOG_TAG = MarksProvider.class.getSimpleName();
+    public static final int MARKS = 100;
     /**
-     * URI matcher code for the content URI for the pets table
+     * URI matcher code for the content URI for a single mark in the table
      */
-    public static final int PETS = 100;
-    /**
-     * URI matcher code for the content URI for a single pet in the pets table
-     */
-    public static final int PET_ID = 101;
+    public static final int MARK_ID = 101;
     /**
      * URI matcher object to match a context URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
@@ -43,7 +38,7 @@ public class MarksProvider extends ContentProvider {
         // The content URI of the form "content://com.example.android.pets/pets" will map to the
         // integer code {@link #PETS}. This URI is used to provide access to MULTIPLE rows
         // of the pets table.
-        sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_MARKS, PETS);
+        sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_MARKS, MARKS);
 
         // The content URI of the form "content://com.example.android.pets/pets/#" will map to the
         // integer code {@link #PETS_ID}. This URI is used to provide access to ONE single row
@@ -52,7 +47,7 @@ public class MarksProvider extends ContentProvider {
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.example.android.pets/pets/3" matches, but
         // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
-        sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_MARKS + "/#", PET_ID);
+        sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_MARKS + "/#", MARK_ID);
     }
 
     private MarksDbHelper mDbHelper;
@@ -81,13 +76,13 @@ public class MarksProvider extends ContentProvider {
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case MARKS:
                 // For the PETS code, query the pets table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the pets table.
                 cursor = database.query(MarksContract.MarksEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
-            case PET_ID:
+            case MARK_ID:
                 // For the PET_ID code, extract out the ID from the URI.
                 // For an example URI such as "content://com.example.android.pets/pets/3",
                 // the selection will be "_id=?" and the selection argument will be a
@@ -121,7 +116,7 @@ public class MarksProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case MARKS:
 
                 String name = contentValues.getAsString(MarksContract.MarksEntry.COLUMN_MARK_TITLE);
                 if (name == null) {
@@ -135,7 +130,7 @@ public class MarksProvider extends ContentProvider {
                 long id = database.insert(MarksContract.MarksEntry.TABLE_NAME, null, contentValues);
                 // If the ID is -1, then the insertion failed. Log an error and return null.
                 if (id == -1) {
-                    Log.e(LOG_TAG, "Failed to insert row for " + uri);
+                    //Log.e(LOG_TAG, "Failed to insert row for " + uri);
                     return null;
                 }
                 //Notify all listeners that the data has changed for the mark content URI
@@ -159,16 +154,16 @@ public class MarksProvider extends ContentProvider {
                       String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                return updatePet(uri, contentValues, selection, selectionArgs);
-            case PET_ID:
+            case MARKS:
+                return updateMark(uri, contentValues, selection, selectionArgs);
+            case MARK_ID:
                 // For the PET_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = MarksContract.MarksEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateMark(uri, contentValues, selection, selectionArgs);
 
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -180,7 +175,7 @@ public class MarksProvider extends ContentProvider {
      * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
      * Return the number of rows that were successfully updated.
      */
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    private int updateMark(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
             return 0;
@@ -207,7 +202,7 @@ public class MarksProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
         switch (match) {
-            case PETS:
+            case MARKS:
                 rowsDeleted = database.delete(MarksContract.MarksEntry.TABLE_NAME, selection, selectionArgs);
                 if (rowsDeleted != 0) {
                     //Notify all listeners that the data has changed for the mark content URI
@@ -216,7 +211,7 @@ public class MarksProvider extends ContentProvider {
                 }
                 // Delete all rows that match the selection and selection args
                 return rowsDeleted;
-            case PET_ID:
+            case MARK_ID:
                 // Delete a single row given by the ID in the URI
                 selection = MarksContract.MarksEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
@@ -239,9 +234,9 @@ public class MarksProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case MARKS:
                 return MarksContract.MarksEntry.CONTENT_LIST_TYPE;
-            case PET_ID:
+            case MARK_ID:
                 return MarksContract.MarksEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
