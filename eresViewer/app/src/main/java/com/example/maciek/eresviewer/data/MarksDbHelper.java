@@ -25,6 +25,7 @@ public class MarksDbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + MarksEntry.TABLE_NAME + " (" +
                         MarksEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        MarksEntry.COLUMN_SUBJECT + " TEXT NOT NULL," +
                         MarksEntry.COLUMN_MARK_TITLE + " TEXT NOT NULL," +
                         MarksEntry.COLUMN_MY_MARK + " INTEGER," +
                         MarksEntry.COLUMN_LOWER_MARK + " INTEGER," +

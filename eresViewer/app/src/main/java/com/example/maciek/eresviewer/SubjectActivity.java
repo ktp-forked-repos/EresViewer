@@ -1,106 +1,164 @@
 package com.example.maciek.eresviewer;
 
-import android.app.LoaderManager;
-import android.content.ContentUris;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
+import android.content.ContentValues;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.example.maciek.eresviewer.data.MarksContract.MarksEntry;
+import com.example.maciek.eresviewer.data.MarksContract;
 
+import java.util.ArrayList;
 
-/**
- * Created by Maciek on 09.07.2017.
- */
-
-public class SubjectActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SubjectActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     //Identifies loader being used in this component
     private static final int MARK_LOADER = 0;
     //Cursor adapter object creating list of marks from database cursors
     MarkCursorAdapter mCursorAdapter;
 
+
+    ArrayList<SubjectFragment> subjectFragments = new ArrayList<SubjectFragment>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
+        setContentView(R.layout.activity_subject);
 
-        //Find the ListView which will be populated with the data
-        ListView listView = (ListView) findViewById(R.id.listview_mark);
-        // Creating cursor adapter taking this activity as context and a null cursor
-        mCursorAdapter = new MarkCursorAdapter(this, null);
-        //Attaching adapter to the listView
-        listView.setAdapter(mCursorAdapter);
-        //Adding onItemClickListener so items of the list will expand when clicked
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        createSubjects();
 
+        /*Creates toolbar*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        /*Creates floating action button, sending snackbar message*/
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                View rozwijane = view.findViewById(R.id.details);
-                //Expanding list elements by hiding part of it
-                if (rozwijane.getVisibility() == View.GONE) {
-                    rozwijane.setVisibility(View.VISIBLE);
-                }
-                else {
-                    //expandedChildList.set(arg2, false);
-                    rozwijane.setVisibility(View.GONE);
-                }
-            }
-        });
-        //Adding onItemLongClickLisener so long pressing list item sends intent to editor activity
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent editorIntent = new Intent(SubjectActivity.this, EditorActivity.class);
-                //Appending id of long-pressed item to database URI
-                Uri currentMarkUri = ContentUris.withAppendedId(MarksEntry.CONTENT_URI, id);
-                editorIntent.setData(currentMarkUri);
-                startActivity(editorIntent);
-                return true;
+            public void onClick(View view) {
+                Snackbar.make(view, "Kliknaleś guziczek", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
             }
         });
 
-        //Start the loader
-        getLoaderManager().initLoader(MARK_LOADER, null, this);
+        /*Creates action bar toggle*/
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        /*Creates view, sliding from left after clicking action bar toggle*/
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, subjectFragments.get(0))
+                .commit();
 
     }
-    /*Using a loader*/
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-         /*Define a projection that specifies which columns from database we will use*/
-        String[] projection = {
-                MarksEntry._ID,
-                MarksEntry.COLUMN_MARK_TITLE,
-                MarksEntry.COLUMN_MY_MARK,
-                MarksEntry.COLUMN_LOWER_MARK,
-                MarksEntry.COLUMN_AVEREGE_MARK,
-                MarksEntry.COLUMN_HIGHER_MARK,
-                MarksEntry.COLUMN_AMOUNT_OF_MARKS};
 
-        //This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(this,
-                MarksEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null
-        );
+    /*Drawer behaviour after pressing back key*/
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
+    /**
+     * Creating options menu
+     *
+     * @param menu Activity menu object
+     */
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursorAdapter.swapCursor(data);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.drawer, menu);
+
+        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+        Menu m = navView.getMenu();
+        SubMenu subjects_menu = m.addSubMenu("Przedmioty");
+        subjects_menu.setGroupCheckable(0, true, true);
+        for (String str : MainActivity.subjects) {
+            subjects_menu.add(0, MainActivity.subjects.indexOf(str), 0, str).setCheckable(true);
+        };
+        //subjects_menu.getItem(0).setChecked(true);
+        return true;
     }
 
+
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     */
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        String subject_title = item.toString();
+        int id = item.getItemId();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, subjectFragments.get(id))
+                .commit();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void createSubjects() {
+        String name;
+
+        for (String str : MainActivity.subjects) {
+            Bundle args = new Bundle();
+            name = str.substring(0, str.indexOf('.'));
+            args.putString("name", name);
+
+            SubjectFragment fragment = new SubjectFragment();
+            fragment.setArguments(args);
+
+            subjectFragments.add(fragment);
+
+           /* ContentValues values = new ContentValues();
+            values.put(MarksContract.MarksEntry.COLUMN_SUBJECT, name);
+            values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, "Test: " + str);
+            values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
+
+            getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
+        }
     }
 }

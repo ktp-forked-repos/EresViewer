@@ -17,7 +17,8 @@
         </activity>
         <activity
             android:name=".SubjectActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -28,17 +29,17 @@
             android:name=".EditorActivity"
             android:parentActivityName=".MainActivity">
 
-
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <provider
             android:name=".data.MarksProvider"
             android:authorities="com.example.maciek.eresviewer"
             android:exported="false" />
+
+
     </application>
 
 </manifest>

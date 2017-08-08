@@ -118,6 +118,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             values.put(MarksEntry.COLUMN_AMOUNT_OF_MARKS, amountOfMarks);
         else values.put(MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
 
+        values.put(MarksEntry.COLUMN_SUBJECT,"CYPS");
+
         // Adding new mark
         if (currentMarkUri == null) {
             Uri newUri = getContentResolver().insert(MarksEntry.CONTENT_URI, values);
