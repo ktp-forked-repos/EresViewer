@@ -50,7 +50,7 @@ public class RefreshSubjectTask extends downloadHTMLPageTask<String, Void, Subje
     }
     @Override
     protected void onPostExecute(Subject sub){
-        refreshedActivity.refresh(sub);
+        //refreshedActivity.refresh(sub);
     }
 
     private void fillMissingFields(Elements marks){

@@ -1,9 +1,6 @@
 package com.example.maciek.eresviewer;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,13 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-
-import com.example.maciek.eresviewer.data.MarksContract;
 
 import java.util.ArrayList;
 
@@ -41,8 +35,8 @@ public class SubjectActivity extends AppCompatActivity
 
         createSubjects();
 
-        RefreshSubjectTask rst= new RefreshSubjectTask(this);
-        String[] dataForConnection={"https://studia.elka.pw.edu.pl/pl/17L/"+getSubjectName()+"/info/",
+        RefreshSubjectTask rst = new RefreshSubjectTask(this);
+        String[] dataForConnection = {"https://studia.elka.pw.edu.pl/pl/17L/" + getSubjectName() + "/info/",
                 getSubjectName()};
         rst.execute(dataForConnection);
 
@@ -77,8 +71,9 @@ public class SubjectActivity extends AppCompatActivity
                 .commit();
 
     }
-    private String getSubjectName(){
-        Intent intent=getIntent();
+
+    private String getSubjectName() {
+        Intent intent = getIntent();
         return intent.getStringExtra("subject name");
     }
 
@@ -109,7 +104,8 @@ public class SubjectActivity extends AppCompatActivity
         subjects_menu.setGroupCheckable(0, true, true);
         for (String str : MainActivity.subjects) {
             subjects_menu.add(0, MainActivity.subjects.indexOf(str), 0, str).setCheckable(true);
-        };
+        }
+        ;
         //subjects_menu.getItem(0).setChecked(true);
         return true;
     }
@@ -174,9 +170,4 @@ public class SubjectActivity extends AppCompatActivity
         }
     }
 
-    public void refresh(Subject sub) {
-        for(Mark mark : sub.getMarks())
-            marks.add(mark);
-        markAdapter.notifyDataSetChanged();
-    }
 }
