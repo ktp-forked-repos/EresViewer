@@ -3,49 +3,78 @@ package com.example.maciek.eresviewer;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.content.ContentValues;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ExpandableListView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
 
 import com.example.maciek.eresviewer.data.MarksContract;
-import com.example.maciek.eresviewer.data.MarksDbHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Maciek on 09.07.2017.
- */
+public class SubjectActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-public class SubjectActivity extends AppCompatActivity {
+    //Identifies loader being used in this component
+    private static final int MARK_LOADER = 0;
+    //Cursor adapter object creating list of marks from database cursors
+    MarkCursorAdapter mCursorAdapter;
 
-    private ExpandableListView listView;
-    private ExpandableListAdapter markAdapter;
-    //Todo: Zmienić, żeby tutaj był obiekt typu Subject, a nie lista ocen
-    private List<Mark> marks;
+    ArrayList<SubjectFragment> subjectFragments = new ArrayList<SubjectFragment>();
 
-    /**
-     * Database helper that will provide acces to the database
-     */
-    private MarksDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_subject);
 
-         /*Instantinate subclass of SQLiteOpenHelper and pass the context which is the current activity**/
-        mDbHelper = new MarksDbHelper(this);
+        createSubjects();
 
         RefreshSubjectTask rst= new RefreshSubjectTask(this);
         String[] dataForConnection={"https://studia.elka.pw.edu.pl/pl/17L/"+getSubjectName()+"/info/",
                 getSubjectName()};
         rst.execute(dataForConnection);
-        initData();
-        setContentView(R.layout.activity_subject);
-        markAdapter = new ExpandableListAdapter(this, marks);
-        listView = (ExpandableListView) findViewById(R.id.listview_mark);
-        listView.setAdapter(markAdapter);
 
+        /*Creates toolbar*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        /*Creates floating action button, sending snackbar message*/
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Kliknaleś guziczek", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        /*Creates action bar toggle*/
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        /*Creates view, sliding from left after clicking action bar toggle*/
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, subjectFragments.get(0))
+                .commit();
 
     }
     private String getSubjectName(){
@@ -53,57 +82,95 @@ public class SubjectActivity extends AppCompatActivity {
         return intent.getStringExtra("subject name");
     }
 
-    private void initData() {
-        /*Create and open a database to read from it */
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        /*Creating ArrayList for marks loaded from database*/
-        marks = new ArrayList<>();
+    /*Drawer behaviour after pressing back key*/
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-        /*Define a projection that specifies which columnts from database we will use*/
-        String[] projection = {
-                MarksContract.MarksEntry._ID,
-                MarksContract.MarksEntry.COLUMN_MARK_TITLE,
-                MarksContract.MarksEntry.COLUMN_MY_MARK,
-                MarksContract.MarksEntry.COLUMN_LOWER_MARK,
-                MarksContract.MarksEntry.COLUMN_AVEREGE_MARK,
-                MarksContract.MarksEntry.COLUMN_HIGHER_MARK,
-                MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS};
+    /**
+     * Creating options menu
+     *
+     * @param menu Activity menu object
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.drawer, menu);
 
-        /*Make a query on the marks table*/
-        Cursor cursor = db.query(
-                MarksContract.MarksEntry.TABLE_NAME, // The table to query
-                projection,                          // Columns to return
-                null,                                // Columns for the WHERE clause
-                null,                                // Values for the WHERE clause
-                null,                                // Don't group the rows
-                null,                                // Don't filter by row groups
-                null);                              // The sort order
+        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+        Menu m = navView.getMenu();
+        SubMenu subjects_menu = m.addSubMenu("Przedmioty");
+        subjects_menu.setGroupCheckable(0, true, true);
+        for (String str : MainActivity.subjects) {
+            subjects_menu.add(0, MainActivity.subjects.indexOf(str), 0, str).setCheckable(true);
+        };
+        //subjects_menu.getItem(0).setChecked(true);
+        return true;
+    }
 
-        try {
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry._ID);
-            int markTitleColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MARK_TITLE);
-            int myMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MY_MARK);
-            int lowerMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_LOWER_MARK);
-            int averegeMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK);
-            int higherMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_HIGHER_MARK);
-            int amountOfMarksColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS);
 
-            while (cursor.moveToNext()) {
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
-                int currentID = cursor.getInt(idColumnIndex);
-                marks.add(new Mark(
-                        cursor.getString(markTitleColumnIndex),
-                        cursor.getFloat(myMarkColumnIndex)/100,
-                        cursor.getFloat(lowerMarkColumnIndex)/100,
-                        cursor.getFloat(averegeMarkColumnIndex)/100,
-                        cursor.getFloat(higherMarkColumnIndex)/100,
-                        cursor.getInt(amountOfMarksColumnIndex)
-                ));
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
 
-            }
-        } finally {
-            cursor.close();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        String subject_title = item.toString();
+        int id = item.getItemId();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, subjectFragments.get(id))
+                .commit();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void createSubjects() {
+        String name;
+
+        for (String str : MainActivity.subjects) {
+            Bundle args = new Bundle();
+            name = str.substring(0, str.indexOf('.'));
+            args.putString("name", name);
+
+            SubjectFragment fragment = new SubjectFragment();
+            fragment.setArguments(args);
+
+            subjectFragments.add(fragment);
+
+           /* ContentValues values = new ContentValues();
+            values.put(MarksContract.MarksEntry.COLUMN_SUBJECT, name);
+            values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, "Test: " + str);
+            values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 0);
+            values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
+
+            getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
         }
     }
 

@@ -1,16 +1,19 @@
 package com.example.maciek.eresviewer;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import java.io.BufferedReader;
+import com.example.maciek.eresviewer.data.MarksContract;
+
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,13 +22,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity{
     private ArrayList<String> subjectsList;
-    private Spinner s;
-
-
+    static ArrayList<String> subjects = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,43 +42,6 @@ public class MainActivity extends AppCompatActivity{
             startActivity(loginIntent);
         }
 
-
-
-
-       //new SynchronizeSubjectsWithEres(this).execute(subjects);
-
-        //Odtąd do wycięcia po dodaniu przedmiotów do bazy
-        /*
-        // dodawanie przedmiotów do obiektu typu Spinner
-        s=(Spinner) findViewById(R.id.subjects_spinner);
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,subjects);
-        subjects.add(0, "no selection");
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        //dodawanie zdarzenia otwarcia karty przedmiotu po kliknięciu
-            s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(!parent.getSelectedItem().toString().equals("no selection")) {
-                        Intent subjectIntent = new Intent(MainActivity.this, SubjectActivity.class);
-                        subjectIntent.putExtra("subject name", parent.getSelectedItem().toString());
-                        startActivity(subjectIntent);
-                    }
-
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    //Another interface callback
-                }
-            });
-
-        //odświeżanie przedmiotu
-        //rst.addListeners(this);
-
-        //TUTAJ SKONCZYC WYCINANIE
-        */
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,8 +50,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
-        TextView add=(TextView)findViewById(R.id.addView);
+        TextView add = (TextView) findViewById(R.id.addView);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +58,20 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(editorIntent);
             }
         });
+  
+   /*Lista przedmiotów wpisana z ręki*/
+        subjects.add("CYPS.B");
+        subjects.add("ELIU.B");
+        subjects.add("ELIUL.B");
+        subjects.add("FOT.A");
+        subjects.add("JAP3.A");
+        subjects.add("LPTC.A");
+        subjects.add("PR.B");
+        subjects.add("PROZE.A");
+        subjects.add("PTC.B");
+        subjects.add("RDC.A");
+        subjects.add("TINE.A");
+        subjects.add("WF4.A");
     }
 
     private Boolean checkIfTheUserIsSignedIn() {
@@ -103,6 +81,5 @@ public class MainActivity extends AppCompatActivity{
             return false;
 
     }
-
 
 }
