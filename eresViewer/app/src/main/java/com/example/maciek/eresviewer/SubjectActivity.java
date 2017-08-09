@@ -1,5 +1,6 @@
 package com.example.maciek.eresviewer;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -20,7 +21,9 @@ public class SubjectActivity extends AppCompatActivity {
 
     private ExpandableListView listView;
     private ExpandableListAdapter markAdapter;
+    //Todo: Zmienić, żeby tutaj był obiekt typu Subject, a nie lista ocen
     private List<Mark> marks;
+
     /**
      * Database helper that will provide acces to the database
      */
@@ -33,7 +36,10 @@ public class SubjectActivity extends AppCompatActivity {
          /*Instantinate subclass of SQLiteOpenHelper and pass the context which is the current activity**/
         mDbHelper = new MarksDbHelper(this);
 
-
+        RefreshSubjectTask rst= new RefreshSubjectTask(this);
+        String[] dataForConnection={"https://studia.elka.pw.edu.pl/pl/17L/"+getSubjectName()+"/info/",
+                getSubjectName()};
+        rst.execute(dataForConnection);
         initData();
         setContentView(R.layout.activity_subject);
         markAdapter = new ExpandableListAdapter(this, marks);
@@ -41,6 +47,10 @@ public class SubjectActivity extends AppCompatActivity {
         listView.setAdapter(markAdapter);
 
 
+    }
+    private String getSubjectName(){
+        Intent intent=getIntent();
+        return intent.getStringExtra("subject name");
     }
 
     private void initData() {
@@ -95,5 +105,11 @@ public class SubjectActivity extends AppCompatActivity {
         } finally {
             cursor.close();
         }
+    }
+
+    public void refresh(Subject sub) {
+        for(Mark mark : sub.getMarks())
+            marks.add(mark);
+        markAdapter.notifyDataSetChanged();
     }
 }

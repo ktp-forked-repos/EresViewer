@@ -24,6 +24,6 @@ public class Subject {
     public void addMark(Mark mark){
         marks.add(mark);
     }
-
+    public ArrayList<Mark> getMarks(){ return marks; }
 
 }

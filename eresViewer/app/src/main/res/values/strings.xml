@@ -8,6 +8,9 @@
     <!-- Category name for marks -->
     <string name="category_marks">Oceny</string>
 
+    <!-- Category name for plan -->
+    <string name="category_plan">Oceny</string>
+
     <!-- Category name for settings -->
     <string name="category_settings">Ustawienia</string>
 
@@ -32,6 +35,20 @@
     <!-- amount of marks label for topBar in activity_subject -->
     <string name="topbar_amount">L.ocen</string>
 
+    <!-- Top string in activity_login-->
+    <string name="login_top_string">Zaloguj się</string>
+    <!-- login string in activity_login-->
+    <string name="login_string">Nazwa użytkownika</string>
+    <!-- password string in activity_login-->
+    <string name="password_string">Hasło</string>
+
+    <!--ERES URL address to current term-->
+    <string name="main_page_URL">https://studia.elka.pw.edu.pl/pl/17L/</string>
+    <!-- adres głównej strony serwera studia do obecnego semestru-->
+    <string name="login_info_string">Nieprawidłowa nazwa użytkownika lub hasło.</string>
+
+    <!-- button string in activity_login -->
+    <string name="login_button">Zaloguj się</string>
 
     <string name="moja_ocena">moja ocena</string>
     <string name="nazwa_oceny">nazwa oceny</string>

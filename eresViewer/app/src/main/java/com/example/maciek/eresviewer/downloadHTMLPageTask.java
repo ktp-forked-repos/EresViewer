@@ -1,5 +1,6 @@
 package com.example.maciek.eresviewer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
 
@@ -22,6 +23,13 @@ import javax.net.ssl.HttpsURLConnection;
 
 public abstract class downloadHTMLPageTask<Params, Progress, Result> extends
         AsyncTask<Params, Progress, Result>  {
+
+    protected final Context appContext;
+    private int responseCode;
+
+    public downloadHTMLPageTask(Context context){
+        appContext=context;
+    }
     /**
      * metoda zwracająca obiekt typu Dokument potrzebny do łatwego parsowania plików
      * HTML za pomocą biblioteki Jsoup
@@ -33,13 +41,13 @@ public abstract class downloadHTMLPageTask<Params, Progress, Result> extends
             HttpsURLConnection connection=(HttpsURLConnection)url1.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
-            String username="mkobiere";
-            String password="PLNYselena1";
+            String username=Preferences.getLogin(appContext);
+            String password=Preferences.getPassword(appContext);
             byte[] message = (username+":"+password).getBytes("UTF-8");
             String encoded = Base64.encodeToString(message, Base64.DEFAULT);
             connection.setRequestProperty("Authorization", "Basic "+encoded);
             DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
-            int responseCode=connection.getResponseCode();
+            responseCode=connection.getResponseCode();
 
             BufferedReader br= new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line="";
@@ -62,4 +70,5 @@ public abstract class downloadHTMLPageTask<Params, Progress, Result> extends
         }
         return doc;
     }
+    public int gerResponseCode(){ return responseCode; }
 }
