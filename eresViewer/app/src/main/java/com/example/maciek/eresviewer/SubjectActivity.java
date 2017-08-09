@@ -1,5 +1,6 @@
 package com.example.maciek.eresviewer;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,18 +16,14 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 
+import com.example.maciek.eresviewer.data.MarksContract;
+
 import java.util.ArrayList;
 
 public class SubjectActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //Identifies loader being used in this component
-    private static final int MARK_LOADER = 0;
-    //Cursor adapter object creating list of marks from database cursors
-    MarkCursorAdapter mCursorAdapter;
-
     ArrayList<SubjectFragment> subjectFragments = new ArrayList<SubjectFragment>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +32,10 @@ public class SubjectActivity extends AppCompatActivity
 
         createSubjects();
 
-        RefreshSubjectTask rst = new RefreshSubjectTask(this);
+       /* RefreshSubjectTask rst = new RefreshSubjectTask(this);
         String[] dataForConnection = {"https://studia.elka.pw.edu.pl/pl/17L/" + getSubjectName() + "/info/",
                 getSubjectName()};
-        rst.execute(dataForConnection);
+        rst.execute(dataForConnection);*/
 
         /*Creates toolbar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,7 +61,6 @@ public class SubjectActivity extends AppCompatActivity
         /*Creates view, sliding from left after clicking action bar toggle*/
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, subjectFragments.get(0))
@@ -157,7 +153,7 @@ public class SubjectActivity extends AppCompatActivity
 
             subjectFragments.add(fragment);
 
-           /* ContentValues values = new ContentValues();
+            ContentValues values = new ContentValues();
             values.put(MarksContract.MarksEntry.COLUMN_SUBJECT, name);
             values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, "Test: " + str);
             values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 0);
@@ -166,7 +162,7 @@ public class SubjectActivity extends AppCompatActivity
             values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 0);
             values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
 
-            getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
+            getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);
         }
     }
 

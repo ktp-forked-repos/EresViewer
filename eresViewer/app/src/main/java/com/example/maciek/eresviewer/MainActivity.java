@@ -5,21 +5,22 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     static ArrayList<String> subjects = new ArrayList<String>();
-    private ArrayList<String> subjectsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<String> subjects = new ArrayList<>();
+
+        //ArrayList<String> subjects = new ArrayList<>();
         TextView marks = (TextView) findViewById(R.id.marksView);
+
         //Todo: usunac te linie potem
         Preferences.removeCredentials(this);
+
         if (!checkIfTheUserIsSignedIn()) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
