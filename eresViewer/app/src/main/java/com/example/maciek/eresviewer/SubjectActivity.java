@@ -1,5 +1,8 @@
 package com.example.maciek.eresviewer;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,16 +31,20 @@ public class SubjectActivity extends AppCompatActivity
     //Cursor adapter object creating list of marks from database cursors
     MarkCursorAdapter mCursorAdapter;
 
-
     ArrayList<SubjectFragment> subjectFragments = new ArrayList<SubjectFragment>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
-        setContentView(R.layout.activity_subject);
 
         createSubjects();
+
+        RefreshSubjectTask rst= new RefreshSubjectTask(this);
+        String[] dataForConnection={"https://studia.elka.pw.edu.pl/pl/17L/"+getSubjectName()+"/info/",
+                getSubjectName()};
+        rst.execute(dataForConnection);
 
         /*Creates toolbar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,10 +71,15 @@ public class SubjectActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, subjectFragments.get(0))
                 .commit();
 
+    }
+    private String getSubjectName(){
+        Intent intent=getIntent();
+        return intent.getStringExtra("subject name");
     }
 
     /*Drawer behaviour after pressing back key*/
@@ -160,5 +172,11 @@ public class SubjectActivity extends AppCompatActivity
 
             getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
         }
+    }
+
+    public void refresh(Subject sub) {
+        for(Mark mark : sub.getMarks())
+            marks.add(mark);
+        markAdapter.notifyDataSetChanged();
     }
 }

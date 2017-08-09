@@ -109,12 +109,12 @@
       <file leaf-file-name="workspace.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-19116">
-              <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+            <state relative-caret-position="19791">
+              <caret line="733" column="43" selection-start-line="733" selection-start-column="43" selection-end-line="733" selection-end-column="43" />
               <folding>
-                <element signature="e#147789#147793#0" expanded="true" />
-                <element signature="e#147799#147803#0" expanded="true" />
-                <element signature="e#147825#147829#0" expanded="true" />
+                <element signature="e#148102#148106#0" expanded="true" />
+                <element signature="e#148112#148116#0" expanded="true" />
+                <element signature="e#148138#148142#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2110,7 +2110,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator currentView="AndroidView" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -2219,38 +2219,7 @@
         </subPane>
       </pane>
       <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eresViewer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eresViewer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eresViewer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eresViewer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eresViewer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value=".idea" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
+        <subPane />
       </pane>
       <pane id="PackagesPane" />
     </panes>
@@ -3213,12 +3182,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-19116">
-          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+        <state relative-caret-position="19791">
+          <caret line="733" column="43" selection-start-line="733" selection-start-column="43" selection-end-line="733" selection-end-column="43" />
           <folding>
-            <element signature="e#147789#147793#0" expanded="true" />
-            <element signature="e#147799#147803#0" expanded="true" />
-            <element signature="e#147825#147829#0" expanded="true" />
+            <element signature="e#148102#148106#0" expanded="true" />
+            <element signature="e#148112#148116#0" expanded="true" />
+            <element signature="e#148138#148142#0" expanded="true" />
           </folding>
         </state>
       </provider>
