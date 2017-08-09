@@ -1,6 +1,7 @@
 package com.example.maciek.eresviewer;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,11 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.maciek.eresviewer.data.MarksContract;
 
@@ -24,7 +27,7 @@ import com.example.maciek.eresviewer.data.MarksContract;
  * {@link SubjectFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class SubjectFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SubjectFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener  {
 
     //Identifies loader being used in this component
     private static final int MARK_LOADER = 0;
@@ -33,6 +36,7 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
     private Uri contentUri;
 
     private String subjectName;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public SubjectFragment() {
         // Required empty public constructor
@@ -48,6 +52,7 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
 
         // Creating cursor adapter taking this activity as context and a null cursor
         mCursorAdapter = new MarkCursorAdapter(getActivity(), null);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
 
         subjectName = getArguments().getString("name");
         contentUri = Uri.withAppendedPath(MarksContract.BASE_CONTENT_URI, MarksContract.PATH_MARKS);
@@ -87,6 +92,31 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
         //Start the loader
         getLoaderManager().initLoader(MARK_LOADER, null, this);
 
+        /*
+ * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+ * performs a swipe-to-refresh gesture.
+ */
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Toast toast = Toast.makeText(getContext(), "Odświeżanko", Toast.LENGTH_SHORT);
+                        toast.show();
+                        ContentValues values = new ContentValues();
+                        values.put(MarksContract.MarksEntry.COLUMN_SUBJECT, subjectName);
+                        values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, "Refresh");
+                        values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 1);
+                        values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, 2);
+                        values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, 3);
+                        values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 4);
+                        values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 5);
+
+                        getActivity().getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
+
         return rootView;
     }
 
@@ -116,6 +146,8 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
         );
     }
 
+
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursorAdapter.swapCursor(data);
@@ -126,20 +158,14 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
         mCursorAdapter.swapCursor(null);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onRefresh() {
+
     }
+
+    /* method calls setRefreshing(false) when it has finished updating the data.
+    * Calling this method instructs the SwipeRefreshLayout to remove the progress
+    * indicator and update the view contents.*/
 
 
 }
