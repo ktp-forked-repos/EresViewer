@@ -24,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView marks = (TextView) findViewById(R.id.marksView);
+        TextView marks=(TextView)findViewById(R.id.marksView);
         //connectWithEres();
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
