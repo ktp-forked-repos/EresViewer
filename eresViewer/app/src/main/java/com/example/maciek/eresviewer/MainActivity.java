@@ -1,5 +1,6 @@
 package com.example.maciek.eresviewer;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         TextView marks = (TextView) findViewById(R.id.marksView);
 
         //Todo: usunac te linie potem
-        Preferences.removeCredentials(this);
+        //Preferences.removeCredentials(this);
 
         if (!checkIfTheUserIsSignedIn()) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -40,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent editorIntent = new Intent(MainActivity.this, EditorActivity.class);
                 startActivity(editorIntent);
+            }
+        });
+        final Activity act=this;
+        TextView clearCredentials=(TextView)findViewById(R.id.clearCredentialsView);
+        clearCredentials.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Preferences.removeCredentials(act);
             }
         });
   
