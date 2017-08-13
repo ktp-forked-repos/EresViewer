@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         //Todo: zapisuje sie haslo przed zalogowaniem
-        Preferences.saveCredentials(this, ((EditText)this.findViewById(R.id.login_view)).getText().toString(), ((EditText)this.findViewById(R.id.passwordEditText)).getText().toString());
+        Preferences.saveCredentials(((EditText)this.findViewById(R.id.login_view)).getText().toString(), ((EditText)this.findViewById(R.id.passwordEditText)).getText().toString(), this);
         showProgressDialog();
         LoginTask lt=new LoginTask(this);
         lt.execute();
