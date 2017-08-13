@@ -105,10 +105,10 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
                         ContentValues values = new ContentValues();
                         values.put(MarksContract.MarksEntry.COLUMN_SUBJECT, subjectName);
                         values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, "Refresh");
-                        values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 1);
-                        values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, 2);
-                        values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, 3);
-                        values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 4);
+                        values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 100);
+                        values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, 200);
+                        values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, 300);
+                        values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 400);
                         values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 5);
 
                         getActivity().getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);

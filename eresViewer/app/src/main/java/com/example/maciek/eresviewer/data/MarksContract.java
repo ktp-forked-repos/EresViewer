@@ -29,6 +29,7 @@ public final class MarksContract {
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
     public static final String PATH_MARKS = "marks";
+    public static final String PATH_SUBJECTS = "subjects";
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
 
@@ -67,4 +68,46 @@ public final class MarksContract {
 
 
     }
+    /**
+     * Inner class that defines the table contents of the the location table
+     */
+    public static final class SubjectsEntry implements BaseColumns {
+        /**
+         * The content URI to access the pet data in the provider
+         */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SUBJECTS);
+
+        // Return multiple rows
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SUBJECTS;
+
+        // Return a single row
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SUBJECTS;
+
+
+        public static final String TABLE_NAME = "subjects";
+
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_SUBJECT_TITLE = "subject_title";
+        public static final String COLUMN_SUBJECT_TITLE_FULL = "subject_title_full";
+        public static final String COLUMN_MARK_3 = "mark_3";
+        public static final String COLUMN_MARK_3_5 = "mark_3_5";
+        public static final String COLUMN_MARK_4 = "mark_4";
+        public static final String COLUMN_MARK_4_5 = "mark_4_5";
+        public static final String COLUMN_MARK_5 = "mark_5";
+
+        public static final String COLUMN_NUMBER_OF_TESTS = "number_of_tests";
+        public static final String COLUMN_NUMBER_OF_EXAMS = "number_of_exams";
+        public static final String COLUMN_NUMBER_OF_LABS = "number_of_labs";
+        public static final String COLUMN_NUMBER_OF_PROJECTS = "number_of_projects";
+        public static final String COLUMN_NUMBER_OF_EXTRA = "number_of_extra";
+
+        public static final String COLUMN_MIN_TEST_POINTS = "min_test_points";
+        public static final String COLUMN_MIN_LABS_POINTS = "min_labs_points";
+        public static final String COLUMN_MIN_PROJECTS_POINTS = "min_projects_points";
+        public static final String COLUMN_MIN_EXTRA_POINTS = "min_extra_points";
+
+    }
+
 }

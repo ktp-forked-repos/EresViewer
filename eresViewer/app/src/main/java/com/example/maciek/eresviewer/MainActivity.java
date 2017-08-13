@@ -15,17 +15,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ArrayList<String> subjects = new ArrayList<>();
-        TextView marks = (TextView) findViewById(R.id.marksView);
-
         //Todo: usunac te linie potem
         Preferences.removeCredentials(this);
-
         if (!checkIfTheUserIsSignedIn()) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
         }
 
+        //ArrayList<String> subjects = new ArrayList<>();
+        TextView marks = (TextView) findViewById(R.id.marksView);
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent editorIntent = new Intent(MainActivity.this, EditorActivity.class);
                 startActivity(editorIntent);
+            }
+        });
+
+        TextView config = (TextView) findViewById(R.id.configView);
+        config.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent configIntent = new Intent(MainActivity.this, ConfigActivity.class);
+                startActivity(configIntent);
             }
         });
   
