@@ -48,6 +48,10 @@ public class SubjectActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Kliknaleś guziczek", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
+
+                Intent editorIntent = new Intent(SubjectActivity.this, EditorActivity.class);
+                //editorIntent.putExtra("subjectTitle", "title");
+                startActivity(editorIntent);
             }
         });
 
@@ -102,10 +106,8 @@ public class SubjectActivity extends AppCompatActivity
             subjects_menu.add(0, MainActivity.subjects.indexOf(str), 0, str).setCheckable(true);
         }
         ;
-        //subjects_menu.getItem(0).setChecked(true);
         return true;
     }
-
 
     /**
      * Handle action bar item clicks here. The action bar will
@@ -120,9 +122,9 @@ public class SubjectActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -132,7 +134,7 @@ public class SubjectActivity extends AppCompatActivity
         int id = item.getItemId();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, subjectFragments.get(id))
+                .replace(R.id.container, subjectFragments.get(id), subject_title)
                 .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -140,9 +142,9 @@ public class SubjectActivity extends AppCompatActivity
         return true;
     }
 
+
     private void createSubjects() {
         String name;
-
         for (String str : MainActivity.subjects) {
             Bundle args = new Bundle();
             name = str.substring(0, str.indexOf('.'));

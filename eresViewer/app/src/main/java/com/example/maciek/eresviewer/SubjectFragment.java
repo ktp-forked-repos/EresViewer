@@ -20,13 +20,6 @@ import android.widget.Toast;
 
 import com.example.maciek.eresviewer.data.MarksContract;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SubjectFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- */
 public class SubjectFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener  {
 
     //Identifies loader being used in this component
@@ -84,6 +77,7 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
                 //Appending id of long-pressed item to database URI
                 Uri currentMarkUri = ContentUris.withAppendedId(MarksContract.MarksEntry.CONTENT_URI, id);
                 editorIntent.setData(currentMarkUri);
+                editorIntent.putExtra("subjectTitle",subjectName);
                 startActivity(editorIntent);
                 return true;
             }
