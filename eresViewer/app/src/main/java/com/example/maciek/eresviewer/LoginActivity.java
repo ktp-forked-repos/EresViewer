@@ -35,9 +35,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
     @Override
+    public void onPause(){
+        super.onPause();
+        EditText loginTextView=(EditText)this.findViewById(R.id.login_view);
+        EditText passwordTextView=(EditText)this.findViewById(R.id.passwordEditText);
+        Preferences.saveString(getString(R.string.singin_form_login),(loginTextView).getText().toString(),this);
+        Preferences.saveString(getString(R.string.singin_form_password),(passwordTextView).getText().toString(),this);
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        EditText loginTextView=(EditText)this.findViewById(R.id.login_view);
+        EditText passwordTextView=(EditText)this.findViewById(R.id.passwordEditText);
+        (loginTextView).setText(Preferences.getString(getString(R.string.singin_form_login), this));
+        (passwordTextView).setText(Preferences.getString(getString(R.string.singin_form_password), this));
+        loginTextView.setSelection(loginTextView.getText().length());
+
+    }
+    @Override
     public void onSaveInstanceState(Bundle outState){
         if(loggingProgress!=null && loggingProgress.isShowing())
         outState.putBoolean("isLogging", true);
+        outState.putString(this.getString(R.string.singin_form_login), ((EditText)this.findViewById(R.id.login_view)).getText().toString());
+        outState.putString(this.getString(R.string.singin_form_password), ((EditText)this.findViewById(R.id.passwordEditText)).getText().toString());
+
     }
     private Boolean isItFirstCall(Bundle bundle){
         if(bundle!= null)
@@ -49,27 +70,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     @Override
     public void onClick(View v) {
-        //Todo: zapisuje sie haslo przed zalogowaniem
         Preferences.saveCredentials(((EditText)this.findViewById(R.id.login_view)).getText().toString(), ((EditText)this.findViewById(R.id.passwordEditText)).getText().toString(), this);
         showProgressDialog();
         LoginTask lt=new LoginTask(this);
         lt.execute();
     }
     public ProgressDialog getProgressDialog(){ return loggingProgress; }
-    //@Override
-    public void manTheCode(final int responseCode) {
-
-                switch(responseCode){
-                    case 200:
-                        this.finish();
-                        break;
-                    case 401:
-                        TextView infoLabel=(TextView)findViewById(R.id.InfoTextView);
-                        infoLabel.setVisibility(View.INVISIBLE);
-                        break;
-            }
-
-    }
     @Override
     public void onBackPressed(){
         Intent homeIntent=new Intent(Intent.ACTION_MAIN);

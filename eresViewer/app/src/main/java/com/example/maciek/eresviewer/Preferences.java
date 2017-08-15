@@ -19,7 +19,7 @@ public class Preferences {
 
     public static String getString(String key, Context context){
         sp=context.getSharedPreferences(context.getString(R.string.preferences_name), Context.MODE_PRIVATE);
-        return sp.getString(key, "nie ma");
+        return sp.getString(key, null);
     }
 
     public static void saveCredentials(String login, String password, Context context){

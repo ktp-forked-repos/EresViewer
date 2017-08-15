@@ -56,6 +56,12 @@
     <!--preferences file name -->
     <string name="preferences_name">MyPrefs</string>
 
+    <!-- login string -->
+    <string name="singin_form_login">singin_form_login</string>
+
+    <!-- password string -->
+    <string name="singin_form_password">singin_form_password</string>
+
     <!-- button string in activity_login -->
     <string name="login_button">Zaloguj się</string>
 
