@@ -32,15 +32,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        TextView add = (TextView) findViewById(R.id.addView);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent editorIntent = new Intent(MainActivity.this, EditorActivity.class);
-                startActivity(editorIntent);
-            }
-        });
-
         TextView config = (TextView) findViewById(R.id.configView);
         config.setOnClickListener(new View.OnClickListener() {
             @Override

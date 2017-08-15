@@ -1,6 +1,5 @@
 package com.example.maciek.eresviewer;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,14 +15,14 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 
-import com.example.maciek.eresviewer.data.MarksContract;
-
 import java.util.ArrayList;
 
 public class SubjectActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ArrayList<SubjectFragment> subjectFragments = new ArrayList<SubjectFragment>();
+
+    ArrayList<Subject> subjectsList = new ArrayList<>();
+    int activeSubjectIndex=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class SubjectActivity extends AppCompatActivity
                         .setAction("Action", null).show();
 
                 Intent editorIntent = new Intent(SubjectActivity.this, EditorActivity.class);
-                //editorIntent.putExtra("subjectTitle", "title");
+                editorIntent.putExtra("subjectTitle", subjectsList.get(activeSubjectIndex).getShortSubjectName());
                 startActivity(editorIntent);
             }
         });
@@ -67,14 +66,9 @@ public class SubjectActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, subjectFragments.get(0))
+                .replace(R.id.container, subjectsList.get(activeSubjectIndex).getFragment())
                 .commit();
 
-    }
-
-    private String getSubjectName() {
-        Intent intent = getIntent();
-        return intent.getStringExtra("subject name");
     }
 
     /*Drawer behaviour after pressing back key*/
@@ -102,8 +96,8 @@ public class SubjectActivity extends AppCompatActivity
         Menu m = navView.getMenu();
         SubMenu subjects_menu = m.addSubMenu("Przedmioty");
         subjects_menu.setGroupCheckable(0, true, true);
-        for (String str : MainActivity.subjects) {
-            subjects_menu.add(0, MainActivity.subjects.indexOf(str), 0, str).setCheckable(true);
+        for (Subject subject : subjectsList) {
+            subjects_menu.add(0, subjectsList.indexOf(subject), 0, subject.getSubjectName()).setCheckable(true);
         }
         ;
         return true;
@@ -129,12 +123,10 @@ public class SubjectActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        String subject_title = item.toString();
-        int id = item.getItemId();
+        activeSubjectIndex = item.getItemId();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, subjectFragments.get(id), subject_title)
+                .replace(R.id.container, subjectsList.get(activeSubjectIndex).getFragment())
                 .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -144,27 +136,11 @@ public class SubjectActivity extends AppCompatActivity
 
 
     private void createSubjects() {
-        String name;
         for (String str : MainActivity.subjects) {
-            Bundle args = new Bundle();
-            name = str.substring(0, str.indexOf('.'));
-            args.putString("name", name);
+            Subject subject = new Subject(str);
+            subject.createTestMark(getApplicationContext());
+            subjectsList.add(subject);
 
-            SubjectFragment fragment = new SubjectFragment();
-            fragment.setArguments(args);
-
-            subjectFragments.add(fragment);
-
-            ContentValues values = new ContentValues();
-            values.put(MarksContract.MarksEntry.COLUMN_SUBJECT, name);
-            values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, "Test: " + str);
-            values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, 0);
-            values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, 0);
-            values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, 0);
-            values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, 0);
-            values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
-
-            getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);
         }
     }
 

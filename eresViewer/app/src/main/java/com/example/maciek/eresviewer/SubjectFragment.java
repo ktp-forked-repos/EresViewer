@@ -140,8 +140,6 @@ public class SubjectFragment extends Fragment implements LoaderManager.LoaderCal
         );
     }
 
-
-
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursorAdapter.swapCursor(data);
