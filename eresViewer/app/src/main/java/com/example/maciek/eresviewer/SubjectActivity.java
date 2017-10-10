@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,15 +20,31 @@ public class SubjectActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    ArrayList<Subject> subjectsList = new ArrayList<>();
-    int activeSubjectIndex=0;
+    ArrayList<SubjectFragment> fragmentsList = new ArrayList<>();
+    ArrayList<String> subjects = new ArrayList<String>();
+    int activeSubjectIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
 
-        createSubjects();
+        /*Lista przedmiotów wpisana z ręki*/
+        subjects.add("CYPS.B");
+        subjects.add("ELIU.B");
+        subjects.add("ELIUL.B");
+        subjects.add("FOT.A");
+        subjects.add("JAP3.A");
+        subjects.add("LPTC.A");
+        subjects.add("PR.B");
+        subjects.add("PROZE.A");
+        subjects.add("PTC.B");
+        subjects.add("RDC.A");
+        subjects.add("TINE.A");
+        subjects.add("WF4.A");
+
+        /*Populate empty list of SubjectFragments*/
+        createFragments();
 
        /* RefreshSubjectTask rst = new RefreshSubjectTask(this);
         String[] dataForConnection = {"https://studia.elka.pw.edu.pl/pl/17L/" + getSubjectName() + "/info/",
@@ -40,16 +55,13 @@ public class SubjectActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*Creates floating action button, sending snackbar message*/
+        /*Creates floating action button*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Kliknaleś guziczek", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-
                 Intent editorIntent = new Intent(SubjectActivity.this, EditorActivity.class);
-                editorIntent.putExtra("subjectTitle", subjectsList.get(activeSubjectIndex).getShortSubjectName());
+                editorIntent.putExtra("subjectTitle", fragmentsList.get(activeSubjectIndex).getSubject().getShortSubjectName());
                 startActivity(editorIntent);
             }
         });
@@ -65,10 +77,25 @@ public class SubjectActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        /*Display default fragment*/
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, subjectsList.get(activeSubjectIndex).getFragment())
+                .replace(R.id.container, fragmentsList.get(activeSubjectIndex))
                 .commit();
+    }
 
+    private void createFragments() {
+        for (String str : subjects) {
+            //Subject subject = new Subject(str, getApplicationContext());
+            SubjectFragment fragment = new SubjectFragment();
+
+            /*Way of constructing custom fragment*/
+            Bundle args = new Bundle();
+            args.putString("name", str);
+            fragment.setArguments(args);
+
+            //subject.createTestMark();
+            fragmentsList.add(fragment);
+        }
     }
 
     /*Drawer behaviour after pressing back key*/
@@ -96,10 +123,9 @@ public class SubjectActivity extends AppCompatActivity
         Menu m = navView.getMenu();
         SubMenu subjects_menu = m.addSubMenu("Przedmioty");
         subjects_menu.setGroupCheckable(0, true, true);
-        for (Subject subject : subjectsList) {
-            subjects_menu.add(0, subjectsList.indexOf(subject), 0, subject.getSubjectName()).setCheckable(true);
+        for (String str : subjects) {
+            subjects_menu.add(0, subjects.indexOf(str), 0, str).setCheckable(true);
         }
-        ;
         return true;
     }
 
@@ -125,8 +151,9 @@ public class SubjectActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         activeSubjectIndex = item.getItemId();
 
+        /*Display fragment represented by clicked navigation menu item*/
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, subjectsList.get(activeSubjectIndex).getFragment())
+                .replace(R.id.container, fragmentsList.get(activeSubjectIndex))
                 .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -134,14 +161,5 @@ public class SubjectActivity extends AppCompatActivity
         return true;
     }
 
-
-    private void createSubjects() {
-        for (String str : MainActivity.subjects) {
-            Subject subject = new Subject(str);
-            subject.createTestMark(getApplicationContext());
-            subjectsList.add(subject);
-
-        }
-    }
 
 }

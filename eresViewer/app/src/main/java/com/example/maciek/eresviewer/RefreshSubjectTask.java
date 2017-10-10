@@ -1,6 +1,7 @@
 package com.example.maciek.eresviewer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.widget.ArrayAdapter;
 
