@@ -148,7 +148,6 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        //TODO: Does nothing for now
                       /*  Toast toast = Toast.makeText(getContext(), "Odświeżanko", Toast.LENGTH_SHORT);
                         toast.show();
                         ContentValues values = new ContentValues();
@@ -161,6 +160,10 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, 5);
 
                         getActivity().getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
+
+                        //TODO: porównanie listy ocen przedmiotu z nowo pobranymi ocenami
+
+
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }
