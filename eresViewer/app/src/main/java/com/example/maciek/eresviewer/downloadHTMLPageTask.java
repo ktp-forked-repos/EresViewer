@@ -59,9 +59,6 @@ public abstract class downloadHTMLPageTask<Params, Progress, Result> extends
             String response=responseOutput.toString();
             doc= Jsoup.parse(response);
 
-
-
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -5,4 +5,11 @@
     <color name="colorAccent">#FF4081</color>
     <color name="separatorColor">#C0C0C0</color>
     <color name="appBackgroundColor">#FFFFFF</color>
+    <color name="bottomNavigationBar">#EEEEEE</color>
+    <color name="bottomNavigationText">#6d6d6d</color>
+    <color name="eresBlue">#9696FF</color>
+    <color name="eitiLight">#248CBF</color>
+    <color name="eitiDark">#202E6D</color>
+
+
 </resources>

@@ -39,7 +39,6 @@ public class LoginTask extends downloadHTMLPageTask<Void, Void, Integer>  {
             case 401:
                 loginActivity.getProgressDialog().hide();
                 info_TV.setVisibility(View.VISIBLE);
-                Preferences.removeCredentials(appContext);
                 break;
         }
     }

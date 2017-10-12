@@ -29,6 +29,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private EditText mMarkTitleEditText, mMyMarkEditText, mMarkMinEditText, mMarkAvgEditText, mMarkMaxEditText, mAmountOfMarksEditText;
     private Uri currentMarkUri;
+    private String subjectTitle;
 
     //Flag saying if any of EditText fields has been touched by user
     private boolean changed = false;
@@ -58,6 +59,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             setTitle("Edycja oceny");
             getLoaderManager().initLoader(MARK_LOADER, null, this);
         }
+        subjectTitle = intent.getStringExtra("subjectTitle");
 
         /*Find all relevant views that we will need to read user input from*/
         mMarkTitleEditText = (EditText) findViewById(R.id.edit_mark_title);
@@ -118,7 +120,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             values.put(MarksEntry.COLUMN_AMOUNT_OF_MARKS, amountOfMarks);
         else values.put(MarksEntry.COLUMN_AMOUNT_OF_MARKS, 0);
 
-        values.put(MarksEntry.COLUMN_SUBJECT,"CYPS");
+        values.put(MarksEntry.COLUMN_SUBJECT,subjectTitle);
 
         // Adding new mark
         if (currentMarkUri == null) {
