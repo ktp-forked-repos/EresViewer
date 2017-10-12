@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Button button=(Button)findViewById(R.id.loginButton);
         button.setOnClickListener(this);
-<<<<<<< HEAD
+
         if(!isItFirstCall(savedInstanceState)){
             if(savedInstanceState.getBoolean("isLogging", false))
             showProgressDialog();
@@ -39,8 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         EditText passwordTextView=(EditText)this.findViewById(R.id.passwordEditText);
         Preferences.saveString(getString(R.string.singin_form_login),(loginTextView).getText().toString(),this);
         Preferences.saveString(getString(R.string.singin_form_password),(passwordTextView).getText().toString(),this);
-=======
->>>>>>> parent of de51a80... Merge branch 'master' into subject_configuration
+
     }
 
     @Override
@@ -65,9 +64,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         infoLabel.setVisibility(View.INVISIBLE);
                         break;
             }
-
-
-
 
     }
 }
