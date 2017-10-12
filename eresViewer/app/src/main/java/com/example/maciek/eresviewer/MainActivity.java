@@ -1,4 +1,4 @@
-package com.example.maciek.eresviewer;
+﻿package com.example.maciek.eresviewer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,12 +9,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    static ArrayList<String> subjects = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //ArrayList<String> subjects = new ArrayList<>();
         TextView marks = (TextView) findViewById(R.id.marksView);
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
         }
 
+        //ArrayList<String> subjects = new ArrayList<>();
+        TextView marks = (TextView) findViewById(R.id.marksView);
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,14 +36,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        TextView add = (TextView) findViewById(R.id.addView);
-        add.setOnClickListener(new View.OnClickListener() {
+        TextView config = (TextView) findViewById(R.id.configView);
+        config.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent editorIntent = new Intent(MainActivity.this, EditorActivity.class);
-                startActivity(editorIntent);
+                Intent configIntent = new Intent(MainActivity.this, ConfigActivity.class);
+                startActivity(configIntent);
             }
         });
+
         final Activity act=this;
         TextView clearCredentials=(TextView)findViewById(R.id.clearCredentialsView);
         clearCredentials.setOnClickListener(new View.OnClickListener(){

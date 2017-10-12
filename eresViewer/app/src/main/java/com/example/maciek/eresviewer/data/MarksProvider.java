@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.example.maciek.eresviewer.data.MarksContract.MarksEntry;
+import com.example.maciek.eresviewer.data.MarksContract.SubjectsEntry;
 
 /**
  * Created by Adrian on 2017-07-15.
@@ -29,6 +30,9 @@ public class MarksProvider extends ContentProvider {
      * The input passed into the constructor represents the code to return for the root URI.
      * It's common to use NO_MATCH as the input for this case.
      */
+    public static final int SUBJECTS = 20;
+    public static final int SUBJECTS_ID = 21;
+
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     // Static initializer. This is run the first time anything is called from this class.
@@ -50,6 +54,10 @@ public class MarksProvider extends ContentProvider {
         // For example, "content://com.example.android.pets/pets/3" matches, but
         // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
         sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_MARKS + "/#", MARK_ID);
+
+        sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_SUBJECTS, SUBJECTS);
+        sUriMatcher.addURI(MarksContract.CONTENT_AUTHORITY, MarksContract.PATH_SUBJECTS + "/#", SUBJECTS_ID);
+
     }
 
     private MarksDbHelper mDbHelper;
@@ -84,6 +92,9 @@ public class MarksProvider extends ContentProvider {
                 // could contain multiple rows of the pets table.
                 cursor = database.query(MarksEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
+            case SUBJECTS:
+                cursor = database.query(SubjectsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
             case MARK_ID:
                 // For the PET_ID code, extract out the ID from the URI.
                 // For an example URI such as "content://com.example.android.pets/pets/3",
@@ -99,6 +110,13 @@ public class MarksProvider extends ContentProvider {
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(MarksEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case SUBJECTS_ID:
+                selection = SubjectsEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                cursor = database.query(SubjectsEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -117,7 +135,12 @@ public class MarksProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        long id;
         switch (match) {
+
+
             case MARKS:
 
                 String name = contentValues.getAsString(MarksEntry.COLUMN_MARK_TITLE);
@@ -127,11 +150,8 @@ public class MarksProvider extends ContentProvider {
 
                 // TODO: Finish sanity checking the rest of the attributes in ContentValues
 
+                id = database.insert(MarksEntry.TABLE_NAME, null, contentValues);
 
-                // Get writeable database
-                SQLiteDatabase database = mDbHelper.getWritableDatabase();
-                long id = database.insert(MarksEntry.TABLE_NAME, null, contentValues);
-                // If the ID is -1, then the insertion failed. Log an error and return null.
                 if (id == -1) {
                     //Log.e(LOG_TAG, "Failed to insert row for " + uri);
                     return null;
@@ -143,7 +163,18 @@ public class MarksProvider extends ContentProvider {
 
                 // Return the new URI with the ID (of the newly inserted row) appended at the end
                 return ContentUris.withAppendedId(uri, id);
+            case SUBJECTS:
 
+                id = database.insert(SubjectsEntry.TABLE_NAME, null, contentValues);
+
+                if (id == -1) {
+                    //Log.e(LOG_TAG, "Failed to insert row for " + uri);
+                    return null;
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+
+                // Return the new URI with the ID (of the newly inserted row) appended at the end
+                return ContentUris.withAppendedId(uri, id);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -159,6 +190,8 @@ public class MarksProvider extends ContentProvider {
         switch (match) {
             case MARKS:
                 return updateMark(uri, contentValues, selection, selectionArgs);
+            case SUBJECTS:
+                return updateSubject(uri, contentValues, selection, selectionArgs);
             case MARK_ID:
                 // For the PET_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
@@ -167,6 +200,11 @@ public class MarksProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return updateMark(uri, contentValues, selection, selectionArgs);
+            case SUBJECTS_ID:
+                selection = SubjectsEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                return updateSubject(uri, contentValues, selection, selectionArgs);
 
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -190,6 +228,22 @@ public class MarksProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         int rowsUpdated = database.update(MarksEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (rowsUpdated != 0) getContext().getContentResolver().notifyChange(uri, null);
+        return rowsUpdated;
+    }
+
+    private int updateSubject(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        // TODO: Finish sanity checking the rest of the attributes in ContentValues
+
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        int rowsUpdated = database.update(SubjectsEntry.TABLE_NAME, values, selection, selectionArgs);
         if (rowsUpdated != 0) getContext().getContentResolver().notifyChange(uri, null);
         return rowsUpdated;
     }
