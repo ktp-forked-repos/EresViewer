@@ -32,7 +32,7 @@ public class SubjectActivity extends AppCompatActivity
 
         createSubjects();
 
-       /* RefreshSubjectTask rst = new RefreshSubjectTask(this);
+       /* GetMarksTask rst = new GetMarksTask(this);
         String[] dataForConnection = {"https://studia.elka.pw.edu.pl/pl/17L/" + getSubjectName() + "/info/",
                 getSubjectName()};
         rst.execute(dataForConnection);*/
