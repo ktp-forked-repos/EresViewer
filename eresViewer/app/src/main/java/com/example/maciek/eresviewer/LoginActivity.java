@@ -31,8 +31,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if(savedInstanceState.getBoolean("isLogging", false))
             showProgressDialog();
         }
-
-
     }
     @Override
     public void onPause(){

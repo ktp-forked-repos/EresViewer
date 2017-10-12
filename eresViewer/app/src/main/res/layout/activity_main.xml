@@ -55,8 +55,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
 
-<<<<<<< HEAD
-=======
     <Button android:id="@+id/clearCredentialsView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -71,12 +69,5 @@
         app:layout_constraintTop_toBottomOf="@id/settingsView"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
-
-
-
-
-
->>>>>>> master
-
 
 </android.support.constraint.ConstraintLayout>

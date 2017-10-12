@@ -16,22 +16,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
-        //Todo: usunac te linie potem
-        Preferences.removeCredentials(this);
-    /*    if (!checkIfTheUserIsSignedIn()) {
-=======
-        //ArrayList<String> subjects = new ArrayList<>();
-        TextView marks = (TextView) findViewById(R.id.marksView);
-
 
         if (!checkIfTheUserIsSignedIn()) {
->>>>>>> master
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
-        }*/
+        }
 
-        //ArrayList<String> subjects = new ArrayList<>();
+        ArrayList<String> subjects = new ArrayList<>();
         TextView marks = (TextView) findViewById(R.id.marksView);
         marks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(configIntent);
             }
         });
-<<<<<<< HEAD
-=======
+
         final Activity act=this;
         TextView clearCredentials=(TextView)findViewById(R.id.clearCredentialsView);
         clearCredentials.setOnClickListener(new View.OnClickListener(){
@@ -73,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         subjects.add("RDC.A");
         subjects.add("TINE.A");
         subjects.add("WF4.A");
->>>>>>> master
     }
     @Override
     public void onResume(){
