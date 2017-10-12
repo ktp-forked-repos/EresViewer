@@ -1,5 +1,6 @@
-package com.example.maciek.eresviewer;
+﻿package com.example.maciek.eresviewer;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,12 +16,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Todo: usunac te linie potem
-        Preferences.removeCredentials(this);
-    /*    if (!checkIfTheUserIsSignedIn()) {
+
+        //ArrayList<String> subjects = new ArrayList<>();
+        TextView marks = (TextView) findViewById(R.id.marksView);
+
+
+        if (!checkIfTheUserIsSignedIn()) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
-        }*/
+        }
 
         //ArrayList<String> subjects = new ArrayList<>();
         TextView marks = (TextView) findViewById(R.id.marksView);
@@ -40,6 +44,37 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(configIntent);
             }
         });
+
+        final Activity act=this;
+        TextView clearCredentials=(TextView)findViewById(R.id.clearCredentialsView);
+        clearCredentials.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Preferences.removeCredentials(act);
+            }
+        });
+  
+   /*Lista przedmiotów wpisana z ręki*/
+        subjects.add("CYPS.B");
+        subjects.add("ELIU.B");
+        subjects.add("ELIUL.B");
+        subjects.add("FOT.A");
+        subjects.add("JAP3.A");
+        subjects.add("LPTC.A");
+        subjects.add("PR.B");
+        subjects.add("PROZE.A");
+        subjects.add("PTC.B");
+        subjects.add("RDC.A");
+        subjects.add("TINE.A");
+        subjects.add("WF4.A");
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (!checkIfTheUserIsSignedIn()) {
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
     }
 
     private Boolean checkIfTheUserIsSignedIn() {
