@@ -23,11 +23,8 @@
             android:excludeFromRecents="true"
             android:label="@string/app_name"
             android:noHistory="true"
-<<<<<<< HEAD
-            />
-=======
             android:parentActivityName=".MainActivity" />
->>>>>>> parent of de51a80... Merge branch 'master' into subject_configuration
+
         <activity
             android:name=".SubjectActivity"
             android:parentActivityName=".MainActivity"
