@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.maciek.eresviewer">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/eiti_logo"
@@ -15,12 +17,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-      </activity>
-      <activity
+        </activity>
+        <activity
             android:name=".LoginActivity"
+            android:excludeFromRecents="true"
             android:label="@string/app_name"
-            android:noHistory="true" android:excludeFromRecents="true"
+            android:noHistory="true"
+<<<<<<< HEAD
             />
+=======
+            android:parentActivityName=".MainActivity" />
+>>>>>>> parent of de51a80... Merge branch 'master' into subject_configuration
         <activity
             android:name=".SubjectActivity"
             android:parentActivityName=".MainActivity"
@@ -40,10 +47,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
         <provider
             android:name=".data.MarksProvider"
             android:authorities="com.example.maciek.eresviewer"
             android:exported="false" />
+
+        <activity
+            android:name=".ConfigActivity"
+            android:label="@string/title_activity_config">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>
