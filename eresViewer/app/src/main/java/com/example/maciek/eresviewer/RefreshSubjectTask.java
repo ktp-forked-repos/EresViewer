@@ -40,7 +40,7 @@ public class RefreshSubjectTask extends downloadHTMLPageTask<String, Void, Subje
         marks.addAll(subjectMarks.eachText());
 
 
-        Subject createdSubject=new Subject(subjectName);
+        Subject createdSubject=new Subject(subjectName, appContext);
         for(int i=3; i<titles.size(); i++){
             int j=5*i;
             Mark mark=new Mark(titles.get(i), Float.parseFloat(marks.get(j)),Float.parseFloat(marks.get(j+1)),

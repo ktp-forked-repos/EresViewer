@@ -25,7 +25,7 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
     //private static final int MARK_LOADER = 0;
     //Cursor adapter object creating list of marks from database cursors
     //MarkCursorAdapter mCursorAdapter;
-    public MarkAdapter markAdapter;
+
     private Subject subject;
     private Uri contentUri;
     private String subjectName;
@@ -41,47 +41,15 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         subjectName = getArguments().getString("name");
-        subject = new Subject(subjectName);
+        subject = new Subject(subjectName, getContext());
 
+        //Fejkowe pobrane z serwera oceny
         marks_downloaded.add(new Mark("Test 1",1,1,1,1,1));
-        marks_downloaded.add(new Mark("Test 2",2,2,2,2,2));
+        marks_downloaded.add(new Mark("Tost",2,2,2,2,2));
         marks_downloaded.add(new Mark("Test 3",3,3,3,3,3));
+        marks_downloaded.add(new Mark("Chleb",3,0,0,0,0));
 
         //createMarksFromDb();
-    }
-
-    private void createMarksFromDb() {
-        String[] projection = {
-                MarksContract.MarksEntry.COLUMN_SUBJECT,
-                MarksContract.MarksEntry._ID,
-                MarksContract.MarksEntry.COLUMN_MARK_TITLE,
-                MarksContract.MarksEntry.COLUMN_MY_MARK,
-                MarksContract.MarksEntry.COLUMN_LOWER_MARK,
-                MarksContract.MarksEntry.COLUMN_AVEREGE_MARK,
-                MarksContract.MarksEntry.COLUMN_HIGHER_MARK,
-                MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS};
-
-        String selection = "subject = '" + subject.getShortSubjectName() + "';";
-        Cursor cursor = getContext().getContentResolver().query(contentUri, projection, selection, null, null);
-
-        // Find the marks columns that we're interested in
-        int markTitleColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MARK_TITLE);
-        int myMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MY_MARK);
-        int minMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_LOWER_MARK);
-        int avgMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK);
-        int maxMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_HIGHER_MARK);
-        int amountOfMarksColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS);
-        subject.getMarks().clear();
-        while (cursor.moveToNext()) {
-            subject.getMarks().add(new Mark(cursor.getString(markTitleColumnIndex),
-                    cursor.getFloat(myMarkColumnIndex) / 100,
-                    cursor.getFloat(minMarkColumnIndex) / 100,
-                    cursor.getFloat(avgMarkColumnIndex) / 100,
-                    cursor.getFloat(maxMarkColumnIndex) / 100,
-                    cursor.getInt(amountOfMarksColumnIndex)));
-            Log.v("Subject", "Stworzono ocenę z " + subjectName);
-        }
-        cursor.close();
     }
 
     @Override
@@ -99,11 +67,11 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
         contentUri = Uri.withAppendedPath(MarksContract.BASE_CONTENT_URI, MarksContract.PATH_MARKS);
 
-        markAdapter = new MarkAdapter(getContext(), subject.getMarks());
+
 
         /*Attaching adapter to the listView*/
         // listView.setAdapter(mCursorAdapter);
-        listView.setAdapter(markAdapter);
+        listView.setAdapter(subject.markAdapter);
 
         //Adding onItemClickListener so items of the list will expand when clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -162,6 +130,8 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         getActivity().getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
 
                         //TODO: porównanie listy ocen przedmiotu z nowo pobranymi ocenami
+
+                        subject.compareDownloadedMarks(marks_downloaded);
 
 
                         swipeRefreshLayout.setRefreshing(false);
