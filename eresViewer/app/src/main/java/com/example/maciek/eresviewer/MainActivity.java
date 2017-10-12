@@ -1,6 +1,5 @@
 package com.example.maciek.eresviewer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
 
         if (!checkIfTheUserIsSignedIn()) {
+=======
+        //Todo: usunac te linie potem
+        Preferences.removeCredentials(this);
+    /*    if (!checkIfTheUserIsSignedIn()) {
+>>>>>>> parent of de51a80... Merge branch 'master' into subject_configuration
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
         }
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(configIntent);
             }
         });
+<<<<<<< HEAD
 
         final Activity act=this;
         TextView clearCredentials=(TextView)findViewById(R.id.clearCredentialsView);
@@ -71,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
         }
+=======
+>>>>>>> parent of de51a80... Merge branch 'master' into subject_configuration
     }
 
     private Boolean checkIfTheUserIsSignedIn() {

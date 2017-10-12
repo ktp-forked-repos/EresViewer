@@ -46,7 +46,7 @@ public class SubjectActivity extends AppCompatActivity
         /*Populate empty list of SubjectFragments*/
         createFragments();
 
-       /* GetMarksTask rst = new GetMarksTask(this);
+       /* RefreshSubjectTask rst = new RefreshSubjectTask(this);
         String[] dataForConnection = {"https://studia.elka.pw.edu.pl/pl/17L/" + getSubjectName() + "/info/",
                 getSubjectName()};
         rst.execute(dataForConnection);*/
