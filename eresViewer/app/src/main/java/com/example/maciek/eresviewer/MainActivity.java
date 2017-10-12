@@ -1,5 +1,6 @@
 package com.example.maciek.eresviewer;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
         //ArrayList<String> subjects = new ArrayList<>();
         TextView marks = (TextView) findViewById(R.id.marksView);
 
-        //Todo: usunac te linie potem
-        Preferences.removeCredentials(this);
 
         if (!checkIfTheUserIsSignedIn()) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -42,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(editorIntent);
             }
         });
+        final Activity act=this;
+        TextView clearCredentials=(TextView)findViewById(R.id.clearCredentialsView);
+        clearCredentials.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Preferences.removeCredentials(act);
+            }
+        });
   
    /*Lista przedmiotów wpisana z ręki*/
         subjects.add("CYPS.B");
@@ -56,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
         subjects.add("RDC.A");
         subjects.add("TINE.A");
         subjects.add("WF4.A");
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (!checkIfTheUserIsSignedIn()) {
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
     }
 
     private Boolean checkIfTheUserIsSignedIn() {
