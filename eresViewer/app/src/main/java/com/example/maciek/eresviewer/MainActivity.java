@@ -1,4 +1,4 @@
-﻿package com.example.maciek.eresviewer;
+package com.example.maciek.eresviewer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,8 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //ArrayList<String> subjects = new ArrayList<>();
-        TextView marks = (TextView) findViewById(R.id.marksView);
+        ArrayList<String> subjects = new ArrayList<>();
 
 
         if (!checkIfTheUserIsSignedIn()) {
