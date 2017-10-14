@@ -1,4 +1,4 @@
-package com.example.maciek.eresviewer;
+﻿package com.example.maciek.eresviewer;
 
 import android.content.ContentUris;
 import android.content.Intent;
@@ -55,7 +55,7 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_subject, container, false);
         //Find the ListView which will be populated with the data
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_mark);
+        final ListView listView = (ListView) rootView.findViewById(R.id.listview_mark);
 
         // Creating cursor adapter taking this activity as context and a null cursor
         // mCursorAdapter = new MarkCursorAdapter(getActivity(), null);
@@ -92,9 +92,9 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 Intent editorIntent = new Intent(getActivity(), EditorActivity.class);
                 //Appending id of long-pressed item to database URI
                 //TODO: That doesn't work this way!
-                Uri currentMarkUri = ContentUris.withAppendedId(MarksContract.MarksEntry.CONTENT_URI, id);
+                Uri currentMarkUri = ContentUris.withAppendedId(MarksContract.MarksEntry.CONTENT_URI, subject.getMarks().get(position).getDatabaseID());
                 editorIntent.setData(currentMarkUri);
-                editorIntent.putExtra("subjectTitle", subjectName);
+                editorIntent.putExtra("subjectTitle", subject.getShortSubjectName());
                 startActivity(editorIntent);
                 return true;
             }
