@@ -1,5 +1,6 @@
 package com.example.maciek.eresviewer;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         Button button=(Button)findViewById(R.id.loginButton);
         button.setOnClickListener(this);
+        ActionBar ab=getActionBar();
+
+
         if(!isItFirstCall(savedInstanceState)){
             if(savedInstanceState.getBoolean("isLogging", false))
             showProgressDialog();
