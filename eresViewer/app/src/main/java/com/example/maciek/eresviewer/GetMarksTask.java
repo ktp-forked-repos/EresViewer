@@ -43,7 +43,7 @@ public class GetMarksTask extends downloadHTMLPageTask<ArrayList<Mark>, Void, Vo
         allMarks.addAll(subjectMarks.eachText());
         for(int i=3; i<titles.size(); i++) {
             int j = 5 * i;
-            Mark mark = new Mark(titles.get(i), Float.parseFloat(allMarks.get(j)), Float.parseFloat(allMarks.get(j + 1)),
+            Mark mark = new Mark(0,titles.get(i), Float.parseFloat(allMarks.get(j)), Float.parseFloat(allMarks.get(j + 1)),
                     Float.parseFloat(allMarks.get(j + 2)), Float.parseFloat(allMarks.get(j + 3)), Integer.parseInt(allMarks.get(j + 4)));
             marks.add(mark);
         }

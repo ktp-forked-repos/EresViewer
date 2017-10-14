@@ -12,14 +12,24 @@ public class Mark {
     private float averageMark;
     private float higherMark;
     private int amountOfMarks;
+    private int databaseID;
 
-    Mark(String markTitle, float myMark, float lowerMark, float averageMark, float higherMark, int amountOfMarks) {
+    Mark(int id, String markTitle, float myMark, float lowerMark, float averageMark, float higherMark, int amountOfMarks) {
+        this.databaseID = id;
         this.markTitle = markTitle;
         this.myMark = myMark;
         this.lowerMark = lowerMark;
         this.averageMark = averageMark;
         this.higherMark = higherMark;
         this.amountOfMarks = amountOfMarks;
+    }
+
+    public void editMark(Mark newmark) {
+        myMark=newmark.getMyMark();
+        lowerMark=newmark.getLowerMark();
+        averageMark=newmark.getAverageMark();
+        higherMark=newmark.getHigherMark();
+        amountOfMarks=newmark.getAmountOfMarks();
     }
 
     public String getMarkTitle() {
@@ -45,4 +55,6 @@ public class Mark {
     public float getLowerMark() {
         return lowerMark;
     }
+
+    public int getDatabaseID() {return databaseID;}
 }

@@ -44,10 +44,10 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
         subject = new Subject(subjectName, getContext());
 
         //Fejkowe pobrane z serwera oceny
-        marks_downloaded.add(new Mark("Test 1",1,1,1,1,1));
-        marks_downloaded.add(new Mark("Tost",2,2,2,2,2));
-        marks_downloaded.add(new Mark("Test 3",3,3,3,3,3));
-        marks_downloaded.add(new Mark("Chleb",3,0,0,0,0));
+        marks_downloaded.add(new Mark(0, "Test 1",1,1,1,1,1));
+        marks_downloaded.add(new Mark(0, "Tost",2,2,2,2,2));
+        marks_downloaded.add(new Mark(0, "Test 3",3,3,3,3,3));
+        marks_downloaded.add(new Mark(0, "Chleb",10,10,0,0,0));
 
         //createMarksFromDb();
     }
@@ -59,7 +59,7 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_subject, container, false);
         //Find the ListView which will be populated with the data
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_mark);
+        final ListView listView = (ListView) rootView.findViewById(R.id.listview_mark);
 
         // Creating cursor adapter taking this activity as context and a null cursor
         // mCursorAdapter = new MarkCursorAdapter(getActivity(), null);
@@ -96,9 +96,9 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 Intent editorIntent = new Intent(getActivity(), EditorActivity.class);
                 //Appending id of long-pressed item to database URI
                 //TODO: That doesn't work this way!
-                Uri currentMarkUri = ContentUris.withAppendedId(MarksContract.MarksEntry.CONTENT_URI, id);
+                Uri currentMarkUri = ContentUris.withAppendedId(MarksContract.MarksEntry.CONTENT_URI, subject.getMarks().get(position).getDatabaseID());
                 editorIntent.setData(currentMarkUri);
-                editorIntent.putExtra("subjectTitle", subjectName);
+                editorIntent.putExtra("subjectTitle", subject.getShortSubjectName());
                 startActivity(editorIntent);
                 return true;
             }
