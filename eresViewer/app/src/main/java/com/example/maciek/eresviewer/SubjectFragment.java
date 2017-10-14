@@ -43,11 +43,7 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
         subjectName = getArguments().getString("name");
         subject = new Subject(subjectName, getContext());
 
-        //Fejkowe pobrane z serwera oceny
-        marks_downloaded.add(new Mark("Test 1",1,1,1,1,1));
-        marks_downloaded.add(new Mark("Tost",2,2,2,2,2));
-        marks_downloaded.add(new Mark("Test 3",3,3,3,3,3));
-        marks_downloaded.add(new Mark("Chleb",3,0,0,0,0));
+
 
         //createMarksFromDb();
     }
@@ -130,11 +126,9 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         getActivity().getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
 
                         //TODO: porównanie listy ocen przedmiotu z nowo pobranymi ocenami
-                        new GetMarksTask("https://studia.elka.pw.edu.pl/pl/17Z/"+"LPTC.A"+"/info/", subjectName, getContext()).execute(marks_downloaded);
-                        subject.compareDownloadedMarks(marks_downloaded);
+                        new GetMarksTask(subject).execute(marks_downloaded);
+                        //subject.compareDownloadedMarks(marks_downloaded);
 
-
-                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }
         );

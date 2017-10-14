@@ -56,6 +56,8 @@ public class Subject {
 
     public void deleteMark(Mark mark) {
     }
+    public Context getContext(){ return context;}
+
 
     public void compareDownloadedMarks(ArrayList<Mark> downloaded) {
 

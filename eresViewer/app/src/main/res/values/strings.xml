@@ -65,6 +65,9 @@
     <!-- button string in activity_login -->
     <string name="login_button">Zaloguj się</string>
 
+    <!-- my marks page in studia.elka.pw.edu.pl -->
+    <string name="myMarksPage">"https://studia.elka.pw.edu.pl/pl/term/subject/info/"</string>
+
     <string name="moja_ocena">moja ocena</string>
     <string name="nazwa_oceny">nazwa oceny</string>
     <string name="dane_oceny">dane oceny</string>

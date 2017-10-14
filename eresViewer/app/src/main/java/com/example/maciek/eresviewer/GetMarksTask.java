@@ -13,24 +13,21 @@ import java.util.ArrayList;
 /**
  * Created by Maciek on 19.07.2017.
  */
-public class GetMarksTask extends downloadHTMLPageTask<ArrayList<Mark>, Void, Void>{
+public class GetMarksTask extends downloadHTMLPageTask<ArrayList<Mark>, Void, ArrayList<Mark>>{
 
-    //private SubjectActivity refreshedActivity;
-    private String page;
-    private String subjectName;
-    private Context context;
 
-    public GetMarksTask(String page, String subjectName, Context context){
-        super(context);
-        this.page=page;
-        this.subjectName=subjectName;
-        this.context=context;
+    private Subject subject;
+
+    public GetMarksTask(Subject subject){
+        super(subject.getContext());
+        this.subject=subject;
 
     }
-    protected Void doInBackground(ArrayList<Mark>... marks){
+    protected ArrayList<Mark> doInBackground(ArrayList<Mark>... marks){
+        String page=preparePage();
         Document downloadedPage=this.downloadHTMLPage(page);
-        extractMarks(marks[0],downloadedPage, subjectName);
-        return null;
+        extractMarks(marks[0],downloadedPage, subject.getSubjectName());
+        return marks[0];
     }
     protected void extractMarks(ArrayList<Mark>marks,Document document, String subjectName){
         Elements titlesOfActivities=document.select("[class=nagl]").select("[colspan]");
@@ -48,11 +45,18 @@ public class GetMarksTask extends downloadHTMLPageTask<ArrayList<Mark>, Void, Vo
             marks.add(mark);
         }
     }
-    protected void onPreExecute(){
-        ((SwipeRefreshLayout)((Activity)context).findViewById(R.id.swiperefresh)).setRefreshing(true);
+    private String preparePage(){
+        String page=subject.getContext().getString(R.string.myMarksPage);
+        page=page.replaceAll("term", "17L");
+        page=page.replaceAll("subject", subject.getSubjectName());
+        return page;
     }
-    protected void onPostExecute(Subject sub){
-        ((SwipeRefreshLayout)((Activity)context).findViewById(R.id.swiperefresh)).setRefreshing(false);
+    protected void onPreExecute(){
+      //  ((SwipeRefreshLayout)((Activity)context).findViewById(R.id.swiperefresh)).setRefreshing(true);
+    }
+    protected void onPostExecute(ArrayList<Mark> result){
+        ((SwipeRefreshLayout)((Activity)subject.getContext()).findViewById(R.id.swiperefresh)).setRefreshing(false);
+        subject.compareDownloadedMarks(result);
     }
 
     private void fillMissingFields(Elements marks){
