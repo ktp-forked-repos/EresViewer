@@ -1,5 +1,6 @@
 package com.example.maciek.eresviewer;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -51,22 +52,48 @@ public class Subject {
         markAdapter.notifyDataSetChanged();
     }
 
-    public void editMark(Mark mark) {
+    public void editMark(Mark oldMark, Mark newMark) {
+        oldMark.editMark(newMark);
+
+        ContentValues values = new ContentValues();
+        values.put(MarksContract.MarksEntry.COLUMN_SUBJECT, shortSubjectName);
+        values.put(MarksContract.MarksEntry.COLUMN_MARK_TITLE, newMark.getMarkTitle());
+        values.put(MarksContract.MarksEntry.COLUMN_MY_MARK, newMark.getMyMark() * 100);
+        values.put(MarksContract.MarksEntry.COLUMN_LOWER_MARK, newMark.getLowerMark() * 100);
+        values.put(MarksContract.MarksEntry.COLUMN_AVEREGE_MARK, newMark.getAverageMark() * 100);
+        values.put(MarksContract.MarksEntry.COLUMN_HIGHER_MARK, newMark.getHigherMark() * 100);
+        values.put(MarksContract.MarksEntry.COLUMN_AMOUNT_OF_MARKS, newMark.getAmountOfMarks());
+
+        int updatedIndex = context.getContentResolver().update(ContentUris.withAppendedId(MarksContract.MarksEntry.CONTENT_URI, oldMark.getDatabaseID()), values, null, null);
+        markAdapter.notifyDataSetChanged();
+
     }
 
     public void deleteMark(Mark mark) {
     }
 
     public void compareDownloadedMarks(ArrayList<Mark> downloaded) {
-
-
+        boolean found;
         for (Mark newMark : downloaded) {
-            boolean found = false;
+            found = false;
             for (Mark oldMark : marks) {
-                if (oldMark.getMarkTitle().equals(newMark.getMarkTitle())) found = true;
+                if (oldMark.getMarkTitle().equals(newMark.getMarkTitle())) {
+                    found = true;
+                    if (!compareMarks(oldMark,newMark)) editMark(oldMark, newMark);
+                }
             }
             if (!found) addMark(newMark);
         }
+
+    }
+
+    private boolean compareMarks(Mark mark1, Mark mark2) {
+        if (mark1.getMyMark() == mark2.getMyMark() &&
+                mark1.getLowerMark() == mark2.getLowerMark() &&
+                mark1.getAverageMark() == mark2.getAverageMark() &&
+                mark1.getHigherMark() == mark2.getHigherMark() &&
+                mark1.getAmountOfMarks() == mark2.getAmountOfMarks()) return true;
+        else return false;
     }
 
 
@@ -111,6 +138,7 @@ public class Subject {
         Cursor cursor = context.getContentResolver().query(contentUri, projection, selection, null, null);
 
         // Find the marks columns that we're interested in
+        int markID = cursor.getColumnIndex(MarksContract.MarksEntry._ID);
         int markTitleColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MARK_TITLE);
         int myMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_MY_MARK);
         int minMarkColumnIndex = cursor.getColumnIndex(MarksContract.MarksEntry.COLUMN_LOWER_MARK);
@@ -120,7 +148,8 @@ public class Subject {
 
         //getMarks().clear();
         while (cursor.moveToNext()) {
-            getMarks().add(new Mark(cursor.getString(markTitleColumnIndex),
+            getMarks().add(new Mark(cursor.getInt(markID),
+                    cursor.getString(markTitleColumnIndex),
                     cursor.getFloat(myMarkColumnIndex) / 100,
                     cursor.getFloat(minMarkColumnIndex) / 100,
                     cursor.getFloat(avgMarkColumnIndex) / 100,
