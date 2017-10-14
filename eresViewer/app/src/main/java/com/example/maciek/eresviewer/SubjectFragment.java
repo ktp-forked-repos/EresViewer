@@ -130,7 +130,7 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         getActivity().getContentResolver().insert(MarksContract.MarksEntry.CONTENT_URI, values);*/
 
                         //TODO: porównanie listy ocen przedmiotu z nowo pobranymi ocenami
-
+                        new GetMarksTask("https://studia.elka.pw.edu.pl/pl/17Z/"+"LPTC.A"+"/info/", subjectName, getContext()).execute(marks_downloaded);
                         subject.compareDownloadedMarks(marks_downloaded);
 
 
@@ -141,7 +141,9 @@ public class SubjectFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         return rootView;
     }
-
+    public void setRefreshing(Boolean isRefreshing){
+        swipeRefreshLayout.setRefreshing(isRefreshing);
+    }
     public Subject getSubject() {
         return subject;
     }

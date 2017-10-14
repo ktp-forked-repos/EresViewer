@@ -1,6 +1,8 @@
 package com.example.maciek.eresviewer;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,11 +18,14 @@ public class GetMarksTask extends downloadHTMLPageTask<ArrayList<Mark>, Void, Vo
     //private SubjectActivity refreshedActivity;
     private String page;
     private String subjectName;
+    private Context context;
 
     public GetMarksTask(String page, String subjectName, Context context){
         super(context);
         this.page=page;
         this.subjectName=subjectName;
+        this.context=context;
+
     }
     protected Void doInBackground(ArrayList<Mark>... marks){
         Document downloadedPage=this.downloadHTMLPage(page);
@@ -43,9 +48,11 @@ public class GetMarksTask extends downloadHTMLPageTask<ArrayList<Mark>, Void, Vo
             marks.add(mark);
         }
     }
+    protected void onPreExecute(){
+        ((SwipeRefreshLayout)((Activity)context).findViewById(R.id.swiperefresh)).setRefreshing(true);
+    }
     protected void onPostExecute(Subject sub){
-        //refreshedActivity.refresh(sub);
-        //TODO: Powiadomienie SubjectFragment o zakończeniu asynctaska
+        ((SwipeRefreshLayout)((Activity)context).findViewById(R.id.swiperefresh)).setRefreshing(false);
     }
 
     private void fillMissingFields(Elements marks){
