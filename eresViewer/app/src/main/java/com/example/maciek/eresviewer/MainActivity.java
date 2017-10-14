@@ -20,11 +20,6 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> subjects = new ArrayList<>();
 
 
-        if (!checkIfTheUserIsSignedIn()) {
-            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(loginIntent);
-        }
-
         //ArrayList<String> subjects = new ArrayList<>();
         TextView marks = (TextView) findViewById(R.id.marksView);
         marks.setOnClickListener(new View.OnClickListener() {
@@ -70,11 +65,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if (!checkIfTheUserIsSignedIn()) {
+       if (!checkIfTheUserIsSignedIn()) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
         }
+
     }
+
 
     private Boolean checkIfTheUserIsSignedIn() {
         if (Preferences.isLoggedIn(this))
